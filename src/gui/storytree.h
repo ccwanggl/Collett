@@ -1,6 +1,6 @@
 /*
-Collett – Collett Main Header
-=============================
+Collett – GUI Story Tree Class
+==============================
 
 This file is a part of Collett
 Copyright 2020–2021, Veronica Berglyd Olsen
@@ -19,11 +19,23 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef COLLETT_H
-#define COLLETT_H
+#ifndef GUISTORYTREE_H
+#define GUISTORYTREE_H
 
-#define COL_VERSION_STR  "0.0.1-alpha0"
-#define COL_VERSION_NUM  0x000001a0
-#define COL_VERSION_DATE "2021-11-14"
+#include <QObject>
+#include <QTreeView>
 
-#endif // COLLETT_H
+namespace Collett {
+
+class GuiStoryTree : public QTreeView
+{
+    Q_OBJECT
+
+public:
+    GuiStoryTree(QWidget *parent=nullptr);
+    ~GuiStoryTree() {};
+
+};
+} // namespace Collett
+
+#endif // GUISTORYTREE_H

@@ -1,6 +1,6 @@
 /*
-Collett – Collett Main Header
-=============================
+Collett – GUI Main Tool Bar Class
+=================================
 
 This file is a part of Collett
 Copyright 2020–2021, Veronica Berglyd Olsen
@@ -19,11 +19,30 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef COLLETT_H
-#define COLLETT_H
+#ifndef GUIMAINTOOLBAR_H
+#define GUIMAINTOOLBAR_H
 
-#define COL_VERSION_STR  "0.0.1-alpha0"
-#define COL_VERSION_NUM  0x000001a0
-#define COL_VERSION_DATE "2021-11-14"
+#include <QObject>
+#include <QToolBar>
+#include <QLabel>
+#include <QString>
 
-#endif // COLLETT_H
+namespace Collett {
+
+class GuiMainToolBar : public QToolBar
+{
+    Q_OBJECT
+
+public:
+    GuiMainToolBar(QWidget *parent=nullptr);
+    ~GuiMainToolBar() {};
+
+    void setProjectName(const QString &name);
+
+private:
+    QLabel *m_projectName;
+
+};
+} // namespace Collett
+
+#endif // GUIMAINTOOLBAR_H

@@ -1,6 +1,6 @@
 /*
-Collett – Collett Main Header
-=============================
+Collett – GUI Tree Tool Bar Class
+=================================
 
 This file is a part of Collett
 Copyright 2020–2021, Veronica Berglyd Olsen
@@ -19,11 +19,23 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef COLLETT_H
-#define COLLETT_H
+#ifndef GUITREETOOLBAR_H
+#define GUITREETOOLBAR_H
 
-#define COL_VERSION_STR  "0.0.1-alpha0"
-#define COL_VERSION_NUM  0x000001a0
-#define COL_VERSION_DATE "2021-11-14"
+#include <QObject>
+#include <QToolBar>
 
-#endif // COLLETT_H
+namespace Collett {
+
+class GuiTreeToolBar : public QToolBar
+{
+    Q_OBJECT
+
+public:
+    GuiTreeToolBar(QWidget *parent=nullptr);
+    ~GuiTreeToolBar() {};
+
+};
+} // namespace Collett
+
+#endif // GUITREETOOLBAR_H

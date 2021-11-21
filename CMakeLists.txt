@@ -1,8 +1,9 @@
+#
 # Collett – CMake Build File
 # ==========================
 #
 # This file is a part of Collett
-# Copyright 2021, Veronica Berglyd Olsen
+# Copyright 2020–2021, Veronica Berglyd Olsen
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +17,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
-
+#
 cmake_minimum_required(VERSION 3.14)
 
 # Version
@@ -72,12 +73,24 @@ qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 
 # Source Folders
 include_directories(
+    src/editor
+    src/gui
+    src/project
     src
 )
 
 # Source Files
 list(APPEND SRC_FILES
+    src/editor/doceditor
+    src/gui/maintoolbar
+    src/gui/statusbar
+    src/gui/storytree
+    src/gui/treetoolbar
+    src/project/storyitem
+    src/project/storymodel
+    src/guimain
     src/main
+    src/settings
 )
 
 # Resource Files
@@ -88,5 +101,6 @@ set(QRC_FILES
 # =======
 
 qt_add_executable(Collett ${SRC_FILES} ${QRC_FILES} ${TS_FILES})
-target_link_libraries(Collett PRIVATE Qt::Widgets)
 set_target_properties(Collett PROPERTIES OUTPUT_NAME "collett")
+target_link_libraries(Collett PRIVATE Qt::Widgets)
+target_compile_definitions(Collett PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")

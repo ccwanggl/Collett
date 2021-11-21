@@ -1,6 +1,6 @@
 /*
-Collett – Collett Main Header
-=============================
+Collett – GUI Document Editor Class
+===================================
 
 This file is a part of Collett
 Copyright 2020–2021, Veronica Berglyd Olsen
@@ -19,11 +19,24 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef COLLETT_H
-#define COLLETT_H
+#ifndef GUIDOCEDITOR_H
+#define GUIDOCEDITOR_H
 
-#define COL_VERSION_STR  "0.0.1-alpha0"
-#define COL_VERSION_NUM  0x000001a0
-#define COL_VERSION_DATE "2021-11-14"
+#include <QObject>
+#include <QTextEdit>
 
-#endif // COLLETT_H
+namespace Collett {
+
+class GuiDocEditor : public QTextEdit
+{
+    Q_OBJECT
+
+public:
+
+    GuiDocEditor(QWidget *parent=nullptr);
+    ~GuiDocEditor() {};
+
+};
+} // namespace Collett
+
+#endif // GUIDOCEDITOR_H

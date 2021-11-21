@@ -1,5 +1,5 @@
 /*
-Collett – Collett Main Header
+Collett – GUI StatusBar Class
 =============================
 
 This file is a part of Collett
@@ -19,11 +19,23 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef COLLETT_H
-#define COLLETT_H
+#ifndef GUIMAINSTATUS_H
+#define GUIMAINSTATUS_H
 
-#define COL_VERSION_STR  "0.0.1-alpha0"
-#define COL_VERSION_NUM  0x000001a0
-#define COL_VERSION_DATE "2021-11-14"
+#include <QObject>
+#include <QStatusBar>
 
-#endif // COLLETT_H
+namespace Collett {
+
+class GuiMainStatus : public QStatusBar
+{
+    Q_OBJECT
+
+public:
+    GuiMainStatus(QWidget *parent=nullptr);
+    ~GuiMainStatus() {};
+
+};
+} // namespace Collett
+
+#endif // GUIMAINSTATUS_H
