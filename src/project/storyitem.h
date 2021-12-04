@@ -19,35 +19,52 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef COLLETTSTORYITEM_H
-#define COLLETTSTORYITEM_H
+#ifndef COLLETT_STORYITEM_H
+#define COLLETT_STORYITEM_H
 
+#include <QUuid>
 #include <QVector>
 #include <QVariant>
+#include <QJsonObject>
 
 namespace Collett {
 
-class CollettStoryItem
+class StoryItem
 {
 public:
-    explicit CollettStoryItem(const QVector<QVariant> &data, CollettStoryItem *parentItem=nullptr);
-    ~CollettStoryItem();
+    explicit StoryItem(const QString &label, StoryItem *parentItem=nullptr);
+    ~StoryItem();
 
-    void appendChild(CollettStoryItem *child);
+    // Structure
+    void appendChild(StoryItem *child);
+    QJsonObject toJsonObject();
 
-    CollettStoryItem *child(int row);
+    // Setters
+    void setLabel(const QString &label);
+    void setWordCount(int count);
+
+    // Getters
+    int wordCount();
+    int childWordCounts();
+
+    // Model Access
+    int row() const;
     int childCount() const;
     int columnCount() const;
     QVariant data(int column) const;
-    int row() const;
-    CollettStoryItem *parentItem();
+    StoryItem *child(int row);
+    StoryItem *parentItem();
 
 private:
-    QVector<CollettStoryItem*> m_childItems;
-    QVector<QVariant> m_itemData;
-    CollettStoryItem *m_parentItem;
+    QVector<StoryItem*> m_childItems;
+    StoryItem          *m_parentItem;
+
+    // Values
+    QUuid   m_handle;
+    QString m_label;
+    int     m_wCount;
 
 };
 } // namespace Collett
 
-#endif // COLLETTSTORYITEM_H
+#endif // COLLETT_STORYITEM_H

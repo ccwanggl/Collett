@@ -23,43 +23,60 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "storyitem.h"
 
 #include <QObject>
+#include <QString>
+#include <QJsonObject>
+#include <QModelIndex>
 #include <QAbstractItemModel>
 
 namespace Collett {
 
 /*
-    CollettStoryModel
-    -----------------
+    StoryModel
+    ----------
     The data model of the project's stroy content.
     Example: https://doc.qt.io/qt-5/qtwidgets-itemviews-simpletreemodel-example.html
 */
 
-CollettStoryModel::CollettStoryModel(const QString &data, QObject *parent)
+StoryModel::StoryModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
-    rootItem = new CollettStoryItem({tr("Title"), tr("Words")});
-    rootItem->appendChild(new CollettStoryItem({"Title Page", 100}, rootItem));
-    rootItem->appendChild(new CollettStoryItem({"Chapter 1", 150}, rootItem));
+    m_rootItem = new StoryItem("");
+    m_rootItem->appendChild(new StoryItem("Title Page", m_rootItem));
+    m_rootItem->appendChild(new StoryItem("Chapter 1", m_rootItem));
 }
 
-CollettStoryModel::~CollettStoryModel() {
-    delete rootItem;
+StoryModel::~StoryModel() {
+    delete m_rootItem;
 }
 
-QModelIndex CollettStoryModel::index(int row, int column, const QModelIndex &parent) const {
+/*
+    Class Methods
+    =============
+*/
+
+QJsonObject StoryModel::toJsonObject() {
+    return m_rootItem->toJsonObject();
+}
+
+/*
+    Model Access
+    ============
+*/
+
+QModelIndex StoryModel::index(int row, int column, const QModelIndex &parent) const {
 
     if (!hasIndex(row, column, parent)) {
         return QModelIndex();
     }
 
-    CollettStoryItem *parentItem;
+    StoryItem *parentItem;
     if (!parent.isValid()) {
-        parentItem = rootItem;
+        parentItem = m_rootItem;
     } else {
-        parentItem = static_cast<CollettStoryItem*>(parent.internalPointer());
+        parentItem = static_cast<StoryItem*>(parent.internalPointer());
     }
 
-    CollettStoryItem *childItem = parentItem->child(row);
+    StoryItem *childItem = parentItem->child(row);
     if (childItem) {
         return createIndex(row, column, childItem);
     } else {
@@ -67,47 +84,47 @@ QModelIndex CollettStoryModel::index(int row, int column, const QModelIndex &par
     }
 }
 
-QModelIndex CollettStoryModel::parent(const QModelIndex &index) const {
+QModelIndex StoryModel::parent(const QModelIndex &index) const {
 
     if (!index.isValid()) {
         return QModelIndex();
     }
 
-    CollettStoryItem *childItem = static_cast<CollettStoryItem*>(index.internalPointer());
-    CollettStoryItem *parentItem = childItem->parentItem();
+    StoryItem *childItem = static_cast<StoryItem*>(index.internalPointer());
+    StoryItem *parentItem = childItem->parentItem();
 
-    if (parentItem == rootItem) {
+    if (parentItem == m_rootItem) {
         return QModelIndex();
     } else {
         return createIndex(parentItem->row(), 0, parentItem);
     }
 }
 
-int CollettStoryModel::rowCount(const QModelIndex &parent) const {
+int StoryModel::rowCount(const QModelIndex &parent) const {
 
-    CollettStoryItem *parentItem;
+    StoryItem *parentItem;
     if (parent.column() > 0) {
         return 0;
     }
 
     if (!parent.isValid()) {
-        parentItem = rootItem;
+        parentItem = m_rootItem;
     } else {
-        parentItem = static_cast<CollettStoryItem*>(parent.internalPointer());
+        parentItem = static_cast<StoryItem*>(parent.internalPointer());
     }
 
     return parentItem->childCount();
 }
 
-int CollettStoryModel::columnCount(const QModelIndex &parent) const {
+int StoryModel::columnCount(const QModelIndex &parent) const {
     if (parent.isValid()) {
-        return static_cast<CollettStoryItem*>(parent.internalPointer())->columnCount();
+        return static_cast<StoryItem*>(parent.internalPointer())->columnCount();
     } else {
-        return rootItem->columnCount();
+        return m_rootItem->columnCount();
     }
 }
 
-QVariant CollettStoryModel::data(const QModelIndex &index, int role) const {
+QVariant StoryModel::data(const QModelIndex &index, int role) const {
 
     if (!index.isValid()) {
         return QVariant();
@@ -116,12 +133,12 @@ QVariant CollettStoryModel::data(const QModelIndex &index, int role) const {
         return QVariant();
     }
 
-    CollettStoryItem *item = static_cast<CollettStoryItem*>(index.internalPointer());
+    StoryItem *item = static_cast<StoryItem*>(index.internalPointer());
 
     return item->data(index.column());
 }
 
-Qt::ItemFlags CollettStoryModel::flags(const QModelIndex &index) const {
+Qt::ItemFlags StoryModel::flags(const QModelIndex &index) const {
     if (!index.isValid()) {
         return Qt::NoItemFlags;
     } else {
@@ -129,10 +146,22 @@ Qt::ItemFlags CollettStoryModel::flags(const QModelIndex &index) const {
     }
 }
 
-QVariant CollettStoryModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant StoryModel::headerData(int section, Qt::Orientation orientation, int role) const {
 
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-        return rootItem->data(section);
+        switch (section) {
+        case 0:
+            return QVariant(tr("Label"));
+            break;
+
+        case 1:
+            return QVariant(tr("Words"));
+            break;
+        
+        default:
+            return QVariant();
+            break;
+        }
     } else {
         return QVariant();
     }

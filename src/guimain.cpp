@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "guimain.h"
+#include "data.h"
 #include "settings.h"
 #include "maintoolbar.h"
 #include "treetoolbar.h"
@@ -33,6 +34,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace Collett {
 
 GuiMain::GuiMain(QWidget *parent) : QMainWindow(parent) {
+
+    // Create Main Data Object
+    m_data = CollettData::instance();
 
     // Collett Widgets
     m_mainToolBar = new GuiMainToolBar(this);
@@ -67,11 +71,32 @@ GuiMain::GuiMain(QWidget *parent) : QMainWindow(parent) {
 }
 
 /*
+    Project Functions
+    =================
+*/
+
+void GuiMain::openProject(const QString &path) {
+    m_data->openProject(path);
+    m_storyTree->setModel(m_data->storyModel());
+    m_mainToolBar->setProjectName(m_data->project()->projectName());
+};
+
+bool GuiMain::saveProject() {
+    return m_data->saveProject();
+}
+
+bool GuiMain::closeProject() {
+    return true;
+};
+
+/*
     GUI Functions
     =============
 */
 
 bool GuiMain::closeMain() {
+
+    m_data->saveProject();
 
     // Save Settings
     CollettSettings *mainConf = CollettSettings::instance();

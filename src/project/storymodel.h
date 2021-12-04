@@ -19,26 +19,31 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef COLLETTSTORYMODEL_H
-#define COLLETTSTORYMODEL_H
+#ifndef COLLETT_STORYMODEL_H
+#define COLLETT_STORYMODEL_H
 
 #include "storyitem.h"
 
 #include <QObject>
 #include <QString>
-#include <QAbstractItemModel>
+#include <QJsonObject>
 #include <QModelIndex>
+#include <QAbstractItemModel>
 
 namespace Collett {
 
-class CollettStoryModel : public QAbstractItemModel
+class StoryModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    explicit CollettStoryModel(const QString &data, QObject *parent=nullptr);
-    ~CollettStoryModel();
+    explicit StoryModel(QObject *parent=nullptr);
+    ~StoryModel();
 
+    // Class Methods
+    QJsonObject toJsonObject();
+
+    // Model Access
     QVariant data(const QModelIndex &index, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
@@ -48,9 +53,9 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
 private:
-    CollettStoryItem *rootItem;
+    StoryItem *m_rootItem;
 
 };
 } // namespace Collett
 
-#endif // COLLETTSTORYMODEL_H
+#endif // COLLETT_STORYMODEL_H

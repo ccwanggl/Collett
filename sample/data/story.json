@@ -1,0 +1,17 @@
+{
+    "handle": "ROOT",
+    "xItems": [
+        {
+            "handle": "b32008d7-5b44-43a6-ace3-a7343b2ad496",
+            "label": "Title Page",
+            "order": 0,
+            "wCount": 0
+        },
+        {
+            "handle": "ff608d47-2fac-4d48-9a9c-13d787bc76c2",
+            "label": "Chapter 1",
+            "order": 1,
+            "wCount": 0
+        }
+    ]
+}

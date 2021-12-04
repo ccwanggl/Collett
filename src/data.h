@@ -1,6 +1,6 @@
 /*
-Collett – Main GUI Class
-========================
+Collett – Core Data Class
+=========================
 
 This file is a part of Collett
 Copyright 2020–2021, Veronica Berglyd Olsen
@@ -19,56 +19,42 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef GUIMAIN_H
-#define GUIMAIN_H
+#ifndef COLLETT_DATA_H
+#define COLLETT_DATA_H
 
 #include "collett.h"
-#include "data.h"
-#include "maintoolbar.h"
-#include "treetoolbar.h"
-#include "statusbar.h"
-#include "storytree.h"
-#include "doceditor.h"
+#include "project.h"
+#include "storymodel.h"
 
-#include <QMainWindow>
-#include <QObject>
 #include <QWidget>
-#include <QSplitter>
+#include <QObject>
 #include <QString>
+#include <QDir>
 
 namespace Collett {
 
-class GuiMain : public QMainWindow
+class CollettDataPrivate;
+class CollettData : public QObject
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(CollettData)
 
 public:
-    GuiMain(QWidget *parent=nullptr);
-    ~GuiMain() {};
-
-    void openProject(const QString &path);
-    bool saveProject();
-    bool closeProject();
-
-    bool closeMain();
+    static CollettData *instance();
+    ~CollettData();
 
 private:
-    CollettData *m_data;
+    QScopedPointer<CollettDataPrivate> d_ptr;
+    CollettData();
 
-    // Collett Widgets
-    GuiMainToolBar *m_mainToolBar;
-    GuiTreeToolBar *m_treeToolBar;
-    GuiStoryTree   *m_storyTree;
-    GuiDocEditor   *m_docEditor;
-    GuiMainStatus  *m_mainStatus;
+public:
+    bool openProject(const QString &path);
+    bool saveProject();
 
-    // GUI Widgets
-    QSplitter *m_splitMain;
-
-    // Events
-    void closeEvent(QCloseEvent*);
+    Project    *project();
+    StoryModel *storyModel();
 
 };
 } // namespace Collett
 
-#endif // GUIMAIN_H
+#endif // COLLETT_DATA_H

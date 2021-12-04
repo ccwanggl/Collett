@@ -19,57 +19,141 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "collett.h"
 #include "storyitem.h"
 
+#include <QUuid>
 #include <QVector>
 #include <QVariant>
+#include <QJsonArray>
+#include <QJsonValue>
+#include <QJsonObject>
 
 namespace Collett {
 
-CollettStoryItem::CollettStoryItem(const QVector<QVariant> &data, CollettStoryItem *parent)
-    : m_itemData(data), m_parentItem(parent)
-{}
+StoryItem::StoryItem(const QString &label, StoryItem *parent)
+    : m_parentItem(parent)
+{
+    m_handle = QUuid::createUuid();
+    m_label  = label;
+    m_wCount = 0;
+}
 
-CollettStoryItem::~CollettStoryItem() {
+StoryItem::~StoryItem() {
     qDeleteAll(m_childItems);
 }
 
-void CollettStoryItem::appendChild(CollettStoryItem *item) {
+/*
+    Item Structure
+    ==============
+*/
+
+void StoryItem::appendChild(StoryItem *item) {
     m_childItems.append(item);
 }
 
-CollettStoryItem *CollettStoryItem::child(int row) {
-    if (row < 0 || row >= m_childItems.size()) {
-        return nullptr;
+QJsonObject StoryItem::toJsonObject() {
+
+    QJsonObject item;
+    QJsonArray children;
+
+    for (qsizetype i=0; i<m_childItems.size(); ++i) {
+        children.append(m_childItems.at(i)->toJsonObject());
     }
-    return m_childItems.at(row);
+
+    if (!m_parentItem) {
+        item["handle"] = "ROOT";
+        item["xItems"] = children;
+    } else {
+        item["handle"] = m_handle.toString(QUuid::WithoutBraces);
+        item["label"]  = m_label;
+        item["order"]  = row();
+        item["wCount"] = m_wCount;
+        if (children.size() > 0) {
+            item["xItems"] = children;
+        }
+    }
+
+    return item;
 }
 
-int CollettStoryItem::childCount() const {
+/*
+    Setters
+    =======
+*/
+
+void StoryItem::setLabel(const QString &label) {
+    m_label = label;
+}
+
+
+void StoryItem::setWordCount(int count) {
+    m_wCount = count > 0 ? count : 0;
+}
+
+/*
+    Getters
+    =======
+*/
+
+int StoryItem::wordCount() {
+    return m_wCount;
+}
+
+int StoryItem::childWordCounts() {
+    int tCount = 0;
+    for (StoryItem* child : m_childItems) {
+        tCount += child->childWordCounts();
+    }
+    return tCount;
+}
+
+/*
+    Model Access
+    ============
+*/
+
+StoryItem *StoryItem::child(int row) {
+    if (row < 0 || row >= m_childItems.size()) {
+        return nullptr;
+    } else {
+        return m_childItems.at(row);
+    }
+}
+
+int StoryItem::childCount() const {
     return m_childItems.count();
 }
 
-int CollettStoryItem::row() const {
+int StoryItem::row() const {
     if (m_parentItem) {
-        return m_parentItem->m_childItems.indexOf(const_cast<CollettStoryItem*>(this));
+        return m_parentItem->m_childItems.indexOf(const_cast<StoryItem*>(this));
     } else {
         return 0;
     }
 }
 
-int CollettStoryItem::columnCount() const {
-    return m_itemData.count();
+int StoryItem::columnCount() const {
+    return COL_STORY_TREE_COL_COUNT;
 }
 
-QVariant CollettStoryItem::data(int column) const {
-    if (column < 0 || column >= m_itemData.size()) {
+QVariant StoryItem::data(int column) const {
+    switch (column) {
+    case 0:
+        return QVariant(m_label);
+        break;
+
+    case 1:
+        return QVariant(m_wCount);
+        break;
+    
+    default:
         return QVariant();
-    } else {
-        return m_itemData.at(column);
+        break;
     }
 }
 
-CollettStoryItem *CollettStoryItem::parentItem() {
+StoryItem *StoryItem::parentItem() {
     return m_parentItem;
 }
 

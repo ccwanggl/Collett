@@ -2,22 +2,9 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
-    <name>Collett::CollettStoryModel</name>
-    <message>
-        <location filename="../src/project/storymodel.cpp" line="40"/>
-        <source>Title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/project/storymodel.cpp" line="40"/>
-        <source>Words</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Collett::GuiMain</name>
     <message>
-        <location filename="../src/guimain.cpp" line="63"/>
+        <location filename="../src/guimain.cpp" line="67"/>
         <source>%1 %2 Version %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -25,17 +12,32 @@
 <context>
     <name>Collett::GuiMainToolBar</name>
     <message>
-        <location filename="../src/gui/maintoolbar.cpp" line="39"/>
+        <location filename="../src/gui/maintoolbar.cpp" line="41"/>
         <source>No Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/maintoolbar.cpp" line="42"/>
+        <location filename="../src/gui/maintoolbar.cpp" line="66"/>
+        <source>New Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/maintoolbar.cpp" line="69"/>
+        <source>Open Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/maintoolbar.cpp" line="72"/>
+        <source>Save Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/maintoolbar.cpp" line="76"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/maintoolbar.cpp" line="46"/>
+        <location filename="../src/gui/maintoolbar.cpp" line="48"/>
         <source>Menu</source>
         <translation type="unfinished"></translation>
     </message>
@@ -50,6 +52,34 @@
     <message>
         <location filename="../src/gui/treetoolbar.cpp" line="40"/>
         <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Collett::Project</name>
+    <message>
+        <location filename="../src/project/project.cpp" line="75"/>
+        <location filename="../src/project/project.cpp" line="87"/>
+        <source>Project not found at: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/project/project.cpp" line="102"/>
+        <location filename="../src/project/project.cpp" line="110"/>
+        <source>Could not create folder: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Collett::StoryModel</name>
+    <message>
+        <location filename="../src/project/storymodel.cpp" line="154"/>
+        <source>Label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/project/storymodel.cpp" line="158"/>
+        <source>Words</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

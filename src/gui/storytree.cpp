@@ -30,7 +30,6 @@ namespace Collett {
 GuiStoryTree::GuiStoryTree(QWidget *parent)
     : QTreeView(parent)
 {
-    this->setModel(new CollettStoryModel("", this));
 }
 
 } // namespace Collett

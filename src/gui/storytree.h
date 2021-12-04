@@ -19,8 +19,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef GUISTORYTREE_H
-#define GUISTORYTREE_H
+#ifndef GUI_STORYTREE_H
+#define GUI_STORYTREE_H
 
 #include <QObject>
 #include <QTreeView>
@@ -38,4 +38,4 @@ public:
 };
 } // namespace Collett
 
-#endif // GUISTORYTREE_H
+#endif // GUI_STORYTREE_H
