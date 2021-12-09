@@ -1,6 +1,6 @@
 /*
-** Collett – GUI StatusBar Class
-** =============================
+** Collett – GUI Story Tree Delegate Class
+** =======================================
 **
 ** This file is a part of Collett
 ** Copyright 2020–2021, Veronica Berglyd Olsen
@@ -19,23 +19,37 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef GUI_MAINSTATUS_H
-#define GUI_MAINSTATUS_H
+#ifndef GUI_STORYTREEDELEGATE_H
+#define GUI_STORYTREEDELEGATE_H
 
+#include <QSize>
+#include <QFont>
 #include <QObject>
-#include <QStatusBar>
+#include <QPainter>
+#include <QModelIndex>
+#include <QStyleOptionViewItem>
+#include <QAbstractItemDelegate>
 
 namespace Collett {
 
-class GuiMainStatus : public QStatusBar
+class GuiStoryTreeDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
 
 public:
-    GuiMainStatus(QWidget *parent=nullptr);
-    ~GuiMainStatus() {};
+    GuiStoryTreeDelegate(QWidget *parent=nullptr);
+    ~GuiStoryTreeDelegate() {};
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+
+private:
+    QFont m_headFont;
+    QFont m_mainFont;
+    int m_headHeight;
+    int m_mainHeight;
 
 };
 } // namespace Collett
 
-#endif // GUI_MAINSTATUS_H
+#endif // GUI_STORYTREEDELEGATE_H

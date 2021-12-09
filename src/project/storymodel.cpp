@@ -1,22 +1,22 @@
 /*
-Collett – Project Model Class
-=============================
-
-This file is a part of Collett
-Copyright 2020–2021, Veronica Berglyd Olsen
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/>.
+** Collett – Project Model Class
+** =============================
+**
+** This file is a part of Collett
+** Copyright 2020–2021, Veronica Berglyd Olsen
+**
+** This program is free software: you can redistribute it and/or modify
+** it under the terms of the GNU General Public License as published by
+** the Free Software Foundation, either version 3 of the License, or
+** (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful, but
+** WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+** General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "storymodel.h"
@@ -30,38 +30,130 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace Collett {
 
-/*
-    StoryModel
-    ----------
-    The data model of the project's stroy content.
-    Example: https://doc.qt.io/qt-5/qtwidgets-itemviews-simpletreemodel-example.html
-*/
+/**!
+ * @brief Construct a new Story Model object.
+ *
+ * The data model of the project's story content.
+ * Example: https://doc.qt.io/qt-5/qtwidgets-itemviews-simpletreemodel-example.html
+ *
+ * @param parent the parent object.
+ */
 
 StoryModel::StoryModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
-    m_rootItem = new StoryItem("");
-    m_rootItem->appendChild(new StoryItem("Title Page", m_rootItem));
-    m_rootItem->appendChild(new StoryItem("Chapter 1", m_rootItem));
+    m_rootItem = new StoryItem("Root", StoryItem::Root);
+
+    StoryItem *bookItem = m_rootItem->addChild("Novel", StoryItem::Book);
+    StoryItem *chp1Item = bookItem->addChild("Chapter 1", StoryItem::Chapter);
+    StoryItem *chp2Item = bookItem->addChild("Chapter 2", StoryItem::Chapter);
+
+    bookItem->addChild("Title Page", StoryItem::Page, 0);
+    bookItem->addChild("Very long title on this element here", StoryItem::Page);
+
+    chp1Item->addChild("Scene 1.1", StoryItem::Scene);
+    chp1Item->addChild("Scene 1.2", StoryItem::Scene);
+    chp2Item->addChild("Scene 2.1", StoryItem::Scene);
+    chp2Item->addChild("Scene 2.2", StoryItem::Scene);
 }
 
 StoryModel::~StoryModel() {
     delete m_rootItem;
 }
 
-/*
-    Class Methods
-    =============
-*/
+/**
+ * Class Methods
+ * =============
+ */
 
+/**!
+ * @brief Build a JSON object of the model.
+ *
+ * Collect the story tree into a nested JSON object. This is a wrapper around
+ * @sa StoryItem::toJsonObject function, which will build the entire tree
+ * recursively.
+ *
+ * @return a JSON object.
+ */
 QJsonObject StoryModel::toJsonObject() {
     return m_rootItem->toJsonObject();
 }
 
-/*
-    Model Access
-    ============
-*/
+/**!
+ * @brief Create and add a new child item.
+ *
+ * Add a new item relative to the item @a relativeTo, with type @a type and a
+ * location @a loc. The location can be Inside, in which case it is appended to
+ * the end of the list of @a relativeTo child items; or Before or After, in which
+ * case it is added directly above or below the @a relativeTo item.
+ *
+ * @param relativeTo the item to add a new item relative to.
+ * @param type       the type of the new item.
+ * @param loc        the relative location of where to add the new item.
+ * @return true if the item was successfully added, otherwise false.
+ */
+bool StoryModel::addItem(StoryItem *relativeTo, StoryItem::ItemType type, AddLocation loc) {
+    if (!relativeTo) {
+        return false;
+    }
+    StoryItem *target = relativeTo;
+    int pos = relativeTo->childCount();
+    if (loc == AddLocation::Before || loc == AddLocation::After) {
+        target = relativeTo->parentItem();
+        pos = relativeTo->row() + (loc == AddLocation::After ? 1 : 0);
+    }
+    if (!target) {
+        return false;
+    }
+    qDebug() << target->row() << pos;
+    emit beginInsertRows(createIndex(target->row(), 0, target), pos, pos);
+    StoryItem *item = target->addChild(tr("New %1").arg(StoryItem::typeToString(type)), type, pos);
+    emit endInsertRows();
+    return item != nullptr;
+}
+
+/**
+ * Class Getters
+ * =============
+ */
+
+StoryItem *StoryModel::rootItem() const {
+    return m_rootItem;
+}
+
+StoryItem *StoryModel::storyItem(const QModelIndex &index) {
+    if (index.isValid()) {
+        return static_cast<StoryItem*>(index.internalPointer());
+    } else {
+        return nullptr;
+    }
+}
+
+QString StoryModel::itemName(const QModelIndex &index) {
+    if (index.isValid()) {
+        StoryItem *item = static_cast<StoryItem*>(index.internalPointer());
+        return item->name();
+    } else {
+        return "";
+    }
+}
+
+/**
+ * Model Edit
+ * ==========
+ */
+
+void StoryModel::setItemName(const QModelIndex &index, const QString &name) {
+    if (index.isValid()) {
+        StoryItem *item = static_cast<StoryItem*>(index.internalPointer());
+        item->setName(name);
+    }
+}
+
+/**
+ * Model Access
+ * ============
+ */
 
 QModelIndex StoryModel::index(int row, int column, const QModelIndex &parent) const {
 
@@ -117,11 +209,7 @@ int StoryModel::rowCount(const QModelIndex &parent) const {
 }
 
 int StoryModel::columnCount(const QModelIndex &parent) const {
-    if (parent.isValid()) {
-        return static_cast<StoryItem*>(parent.internalPointer())->columnCount();
-    } else {
-        return m_rootItem->columnCount();
-    }
+    return 1;
 }
 
 QVariant StoryModel::data(const QModelIndex &index, int role) const {
@@ -135,7 +223,7 @@ QVariant StoryModel::data(const QModelIndex &index, int role) const {
 
     StoryItem *item = static_cast<StoryItem*>(index.internalPointer());
 
-    return item->data(index.column());
+    return item->data();
 }
 
 Qt::ItemFlags StoryModel::flags(const QModelIndex &index) const {
@@ -147,24 +235,7 @@ Qt::ItemFlags StoryModel::flags(const QModelIndex &index) const {
 }
 
 QVariant StoryModel::headerData(int section, Qt::Orientation orientation, int role) const {
-
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-        switch (section) {
-        case 0:
-            return QVariant(tr("Label"));
-            break;
-
-        case 1:
-            return QVariant(tr("Words"));
-            break;
-        
-        default:
-            return QVariant();
-            break;
-        }
-    } else {
-        return QVariant();
-    }
+    return QVariant();
 }
 
 } // namespace Collett

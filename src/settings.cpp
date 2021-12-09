@@ -1,45 +1,43 @@
 /*
-Collett – Main Settings Class
-=============================
-
-This file is a part of Collett
-Copyright 2020–2021, Veronica Berglyd Olsen
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/>.
+** Collett – Main Settings Class
+** =============================
+**
+** This file is a part of Collett
+** Copyright 2020–2021, Veronica Berglyd Olsen
+**
+** This program is free software: you can redistribute it and/or modify
+** it under the terms of the GNU General Public License as published by
+** the Free Software Foundation, either version 3 of the License, or
+** (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful, but
+** WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+** General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "collett.h"
 #include "settings.h"
 
-#define CNF_MAIN_WINDOW_SIZE        "GuiMain/windowSize"
-#define CNF_MAIN_SPLIT_TREE_WIDTH   "GuiMain/splitTreeWidth"
-#define CNF_MAIN_SPLIT_EDITOR_WIDTH "GuiMain/splitEditorWidth"
+#define CNF_MAIN_WINDOW_SIZE "GuiMain/windowSize"
+#define CNF_MAIN_SPLIT_SIZES "GuiMain/mainSplitSizes"
 
-#include <QCoreApplication>
 #include <QList>
-#include <QSettings>
 #include <QSize>
 #include <QVariant>
-
-#include <QDebug>
+#include <QSettings>
+#include <QVariantList>
+#include <QCoreApplication>
 
 namespace Collett {
 
-/*
-    Private Class Declaration
-    =========================
-*/
+/**
+ * Private Class Declaration
+ * =========================
+ */
 
 class CollettSettingsPrivate
 {
@@ -49,15 +47,35 @@ public:
     CollettSettingsPrivate() {};
     ~CollettSettingsPrivate() {};
 
-    QSize m_mainWindowSize;
-    int   m_mainSplitTreeWidth;
-    int   m_mainSplitEditorWidth;
+    QSize      m_mainWindowSize;
+    QList<int> m_mainSplitSizes;
 };
 
-/*
-    Public Class Contruction/Destruction
-    ====================================
-*/
+/**
+ * Converter Functions
+ * ===================
+ */
+
+QList<int> variantListToInt(const QVariantList &list) {
+    QList<int> result;
+    for (const QVariant &val : list) {
+        result.append(val.toInt());
+    }
+    return result;
+}
+
+QVariantList intListToVariant(const QList<int> &list) {
+    QVariantList result;
+    for (const int &val : list) {
+        result.append(val);
+    }
+    return result;
+}
+
+/**
+ * Public Class Contructor/Destructor
+ * ==================================
+ */
 
 CollettSettings *CollettSettingsPrivate::instance = nullptr;
 
@@ -69,16 +87,16 @@ CollettSettings *CollettSettings::instance() {
     return CollettSettingsPrivate::instance;
 }
 
-CollettSettings::CollettSettings() : d_ptr(new CollettSettingsPrivate()) {
-
+CollettSettings::CollettSettings()
+    : d_ptr(new CollettSettingsPrivate())
+{
     Q_D(CollettSettings);
 
     // Load Settings
-    QSettings mainConf;
+    QSettings settings;
 
-    d->m_mainWindowSize       = mainConf.value(CNF_MAIN_WINDOW_SIZE,        QSize(1200, 800)).toSize();
-    d->m_mainSplitTreeWidth   = mainConf.value(CNF_MAIN_SPLIT_TREE_WIDTH,   QVariant(300)).toInt();
-    d->m_mainSplitEditorWidth = mainConf.value(CNF_MAIN_SPLIT_EDITOR_WIDTH, QVariant(900)).toInt();
+    d->m_mainWindowSize = settings.value(CNF_MAIN_WINDOW_SIZE, QSize(1200, 800)).toSize();
+    d->m_mainSplitSizes = variantListToInt(settings.value(CNF_MAIN_SPLIT_SIZES, QVariantList() << 300 << 700).toList());
 
     // Check Values
     if (d->m_mainWindowSize.width() < 400) {
@@ -93,29 +111,28 @@ CollettSettings::~CollettSettings() {
     flushSettings();
 }
 
-/*
-    Public Class Methods
-    ====================
-*/
+/**
+ * Public Class Methods
+ * ====================
+ */
 
 void CollettSettings::flushSettings() {
     Q_D(CollettSettings);
 
-    QSettings mainConf;
+    QSettings settings;
 
-    mainConf.setValue(CNF_MAIN_WINDOW_SIZE,        QVariant(d->m_mainWindowSize));
-    mainConf.setValue(CNF_MAIN_SPLIT_TREE_WIDTH,   QVariant(d->m_mainSplitTreeWidth));
-    mainConf.setValue(CNF_MAIN_SPLIT_EDITOR_WIDTH, QVariant(d->m_mainSplitEditorWidth));
+    settings.setValue(CNF_MAIN_WINDOW_SIZE, d->m_mainWindowSize);
+    settings.setValue(CNF_MAIN_SPLIT_SIZES, intListToVariant(d->m_mainSplitSizes));
 
     qDebug() << "CollettSettings values saved";
 
     return;
 }
 
-/*
-    Setter Functions
-    ================
-*/
+/**
+ * Setter Functions
+ * ================
+ */
 
 void CollettSettings::setMainWindowSize(const QSize size) {
     Q_D(CollettSettings);
@@ -124,18 +141,13 @@ void CollettSettings::setMainWindowSize(const QSize size) {
 
 void CollettSettings::setMainSplitSizes(const QList<int> &sizes) {
     Q_D(CollettSettings);
-    if (sizes.length() > 0) {
-        d->m_mainSplitTreeWidth = sizes.at(0);
-    }
-    if (sizes.length() > 1) {
-        d->m_mainSplitEditorWidth = sizes.at(1);
-    }
+    d->m_mainSplitSizes = sizes;
 }
 
-/*
-    Getter Functions
-    ================
-*/
+/**
+ * Getter Functions
+ * ================
+ */
 
 QSize CollettSettings::mainWindowSize() const {
     Q_D(const CollettSettings);
@@ -144,10 +156,7 @@ QSize CollettSettings::mainWindowSize() const {
 
 QList<int> CollettSettings::mainSplitSizes() const {
     Q_D(const CollettSettings);
-    QList<int> sizes;
-    sizes.append(d->m_mainSplitTreeWidth);
-    sizes.append(d->m_mainSplitEditorWidth);
-    return sizes;
+    return d->m_mainSplitSizes;
 }
 
 } // namespace Collett

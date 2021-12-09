@@ -1,17 +1,74 @@
 {
-    "handle": "ROOT",
+    "type": "ROOT",
     "xItems": [
         {
-            "handle": "b32008d7-5b44-43a6-ace3-a7343b2ad496",
-            "label": "Title Page",
+            "handle": "095f8c2e-89df-4611-a592-d5752adcdcbf",
+            "name": "Sample Novel",
             "order": 0,
-            "wCount": 0
-        },
-        {
-            "handle": "ff608d47-2fac-4d48-9a9c-13d787bc76c2",
-            "label": "Chapter 1",
-            "order": 1,
-            "wCount": 0
+            "type": "BOOK",
+            "wCount": 1234,
+            "xItems": [
+                {
+                    "handle": "4cbbd3f1-0c15-48ab-8cf0-512dd5d28b29",
+                    "name": "Title Page",
+                    "order": 0,
+                    "type": "PAGE",
+                    "wCount": 1234
+                },
+                {
+                    "handle": "2484aee2-80a4-47c8-bae9-04c7b4780aa7",
+                    "name": "Chapter 1",
+                    "order": 1,
+                    "type": "CHAPTER",
+                    "wCount": 1234,
+                    "xItems": [
+                        {
+                            "handle": "7361ce56-9035-4a33-a825-0220c3364496",
+                            "name": "Scene 1.1",
+                            "order": 0,
+                            "type": "SCENE",
+                            "wCount": 1234
+                        },
+                        {
+                            "handle": "09a42313-3345-46ed-b272-8c56117b9428",
+                            "name": "Scene 1.2",
+                            "order": 1,
+                            "type": "SCENE",
+                            "wCount": 1234
+                        }
+                    ]
+                },
+                {
+                    "handle": "f0af1424-89bc-4ec8-87d5-a985d1603b04",
+                    "name": "Chapter 2",
+                    "order": 2,
+                    "type": "CHAPTER",
+                    "wCount": 1234,
+                    "xItems": [
+                        {
+                            "handle": "8878261c-2082-4ceb-bdfe-22ccb09ffa87",
+                            "name": "Scene 2.1",
+                            "order": 0,
+                            "type": "SCENE",
+                            "wCount": 1234
+                        },
+                        {
+                            "handle": "04925f10-f6ea-453c-9c7b-b898c4ea22eb",
+                            "name": "Scene 2.2",
+                            "order": 1,
+                            "type": "SCENE",
+                            "wCount": 1234
+                        }
+                    ]
+                },
+                {
+                    "handle": "fcee8ed9-c2a0-4560-9e3b-afe7f2438525",
+                    "name": "Very long title on this element here",
+                    "order": 3,
+                    "type": "PAGE",
+                    "wCount": 1234
+                }
+            ]
         }
     ]
 }
