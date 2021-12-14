@@ -23,93 +23,87 @@
 #include "project.h"
 #include "storymodel.h"
 
+#include <QString>
 #include <QWidget>
-#include <QDir>
+#include <QVariant>
 
 namespace Collett {
 
 /**
- * Private Class Declaration
- * =========================
+ * Class Constructor/Destructor/Instance
+ * =====================================
  */
 
-class CollettDataPrivate
-{
-public:
-    static CollettData *instance;
-
-    CollettDataPrivate() {};
-    ~CollettDataPrivate() {
-        qDebug() << "Deconstructing: CollettDataPrivate";
-        delete m_project;
-    };
-
-    Project *m_project;
-
-    bool m_hasProject = false;
-};
-
-/**
- * Public Class Contruction/Deconstruction
- * =======================================
- */
-
-CollettData *CollettDataPrivate::instance = nullptr;
-
+CollettData *CollettData::staticInstance = nullptr;
 CollettData *CollettData::instance() {
-    if (CollettDataPrivate::instance == nullptr) {
-        CollettDataPrivate::instance = new CollettData();
-        qDebug() << "CollettData instance created";
+    if (staticInstance == nullptr) {
+        staticInstance = new CollettData();
+        qDebug() << "Constructor: CollettData";
     }
-    return CollettDataPrivate::instance;
+    return staticInstance;
 }
 
-CollettData::CollettData() : d_ptr(new CollettDataPrivate()) {
-    Q_D(CollettData);
+CollettData::CollettData() {}
+CollettData::~CollettData() {
+    qDebug() << "Destructor: CollettData";
+    m_project.reset();
 }
-
-CollettData::~CollettData() {}
 
 /**
- * Public Class Methods
- * ====================
+ * Class Methods
+ * =============
  */
 
 bool CollettData::openProject(const QString &path) {
-    Q_D(CollettData);
 
-    d->m_project = new Project(path);
-    bool status = d->m_project->openProject();
-    d->m_hasProject = d->m_project->hasProject();
+    m_project.reset(new Project(path));
+    if (!m_project.data()->hasError()) {
+        m_project.data()->openProject();
+    }
+    if (!m_project.data()->isValid()) {
+        m_project.reset(nullptr);
+        return false;
+    }
 
-    return status;
+    return true;
 }
 
 bool CollettData::saveProject() {
-    Q_D(CollettData);
-
-    if (d->m_hasProject) {
-        return d->m_project->saveProject();
+    if (hasProject()) {
+        return m_project.data()->saveProject();
     } else {
         return false;
     }
 }
 
-Project *CollettData::project() {
-    Q_D(CollettData);
+void CollettData::closeProject() {
+    m_project.reset(nullptr);
+}
 
-    if (d->m_hasProject) {
-        return d->m_project;
+/**
+ * Class Getters
+ * =============
+ */
+
+bool CollettData::hasProject() const {
+    if (m_project.isNull()) {
+        return false;
+    } else {
+        return m_project.data()->isValid();
+    }
+}
+
+Project *CollettData::project() {
+    if (hasProject()) {
+        return m_project.data();
     } else {
         return nullptr;
     }
 }
 
 StoryModel *CollettData::storyModel() {
-    Q_D(CollettData);
-
-    if (d->m_hasProject) {
-        return d->m_project->storyModel();
+    if (hasProject()) {
+        return m_project.data()->storyModel();
     } else {
         return nullptr;
     }

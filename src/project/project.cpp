@@ -22,6 +22,7 @@
 #include "collett.h"
 #include "project.h"
 #include "storymodel.h"
+#include "datautils.h"
 
 #include <QDir>
 #include <QFile>
@@ -32,43 +33,22 @@
 #include <QByteArray>
 #include <QTextStream>
 #include <QJsonDocument>
+#include <QJsonParseError>
 
 namespace Collett {
 
 /**
- * Project Private Class
- * =====================
+ * Class Constructor/Destructor
+ * ============================
  */
 
-class ProjectPrivate
-{
-public:
-    ProjectPrivate() {};
-    ~ProjectPrivate() {};
-
-    // Project
-    QString m_projectName = "New Project";
-    QString m_bookTitle = "New Project";
-
-    // Meta
-    QDateTime m_createdTime = QDateTime::currentDateTime();
-};
-
-/**
- * Project Class Constructor/Destructor
- * ====================================
- */
-
-Project::Project(const QString &path)
-    : d_ptr(new ProjectPrivate())
-{
-    Q_D(Project);
+Project::Project(const QString &path) {
 
     this->clearError();
-    m_hasProject = false;
+    m_isValid = false;
     m_pathValid = false;
-
     m_storyModel = new StoryModel(this);
+    m_createdTime = QDateTime::currentDateTime().toString(Qt::ISODate);
 
     QFileInfo fObj(path);
     if (!fObj.exists()) {
@@ -119,6 +99,7 @@ Project::Project(const QString &path)
 }
 
 Project::~Project() {
+    qDebug() << "Destructor: Project";
     delete m_storyModel;
 }
 
@@ -135,17 +116,22 @@ bool Project::openProject() {
         return false;
     }
 
-    bool mainFile = loadProjectFile();
+    bool main = loadProjectFile();
+    if (main) {
+        bool settings = loadSettingsFile();
+        bool story = loadStoryFile();
+        m_isValid = settings & story;
+    } else {
+        m_isValid = false;
+    }
 
-    m_hasProject = mainFile;
-
-    return m_hasProject;
+    return m_isValid;
 }
 
 bool Project::saveProject() {
 
     qInfo() << "Saving Project:" << m_projectPath.path();
-    if (!m_hasProject) {
+    if (!m_isValid) {
         qWarning() << "No project open, nothing to save";
         return false;
     }
@@ -158,41 +144,29 @@ bool Project::saveProject() {
 }
 
 /**
- * Project Getters
- * ===============
+ * Class Setters
+ * =============
+ */
+
+void Project::setProjectName(const QString &name) {
+    m_projectName = name.simplified();
+}
+
+/**
+ * Class Getters
+ * =============
  */
 
 QString Project::projectName() const {
-    Q_D(const Project);
-    return d->m_projectName;
+    return m_projectName;
 }
 
-QString Project::bookTitle() const {
-    Q_D(const Project);
-    return d->m_bookTitle;
-}
-
-bool Project::hasProject() const {
-    return m_hasProject;
+bool Project::isValid() const {
+    return m_isValid;
 }
 
 StoryModel *Project::storyModel() {
     return m_storyModel;
-}
-
-/**
- * Project Setters
- * ===============
- */
-
-void Project::setProjectName(const QString &name) {
-    Q_D(Project);
-    d->m_projectName = name.simplified();
-}
-
-void Project::setBookTitle(const QString &title) {
-    Q_D(Project);
-    d->m_bookTitle = title.simplified();
 }
 
 /**
@@ -256,19 +230,44 @@ bool Project::saveProjectFile() {
  */
 
 bool Project::loadSettingsFile() {
+
+    QFile file(m_dataPath.filePath(COL_SETTINGS_FILE_NAME));
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Could not open settings file";
+        return false;
+    }
+
+    QJsonParseError *error = new QJsonParseError();
+    QJsonDocument json = QJsonDocument::fromJson(file.readAll(), error);
+    if (error->error != QJsonParseError::NoError) {
+        qWarning() << "Could not parse story file";
+        qWarning() << error->errorString();
+        return false;
+    }
+
+    if (!json.isObject()) {
+        qWarning() << "Unexpected content of settings file";
+        return false;
+    }
+    QJsonObject jData = json.object();
+    QJsonObject jMeta = jData["meta"].toObject();
+    QJsonObject jProject = jData["project"].toObject();
+    QJsonObject jSettings = jData["settings"].toObject();
+
+    m_createdTime = DataUtils::getJsonString(jMeta, "created", "Unknown");
+    m_projectName = DataUtils::getJsonString(jProject, "projectName", tr("Unnamed Project"));
+
     return true;
 }
 
 bool Project::saveSettingsFile() {
-    Q_D(Project);
 
     QJsonObject jData, jMeta, jProject, jSettings;
 
-    jMeta["created"] = d->m_createdTime.toString(Qt::ISODate);
+    jMeta["created"] = m_createdTime;
     jMeta["updated"] = QDateTime::currentDateTime().toString(Qt::ISODate);
 
-    jProject["bookTitle"] = d->m_bookTitle;
-    jProject["projectName"] = d->m_projectName;
+    jProject["projectName"] = m_projectName;
 
     jData["meta"] = jMeta;
     jData["project"] = jProject;
@@ -299,7 +298,27 @@ bool Project::saveSettingsFile() {
 `*/
 
 bool Project::loadStoryFile() {
-    return true;
+
+    QFile file(m_dataPath.filePath(COL_STORY_FILE_NAME));
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Could not open story file";
+        return false;
+    }
+
+    QJsonParseError *error = new QJsonParseError();
+    QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), error);
+    if (error->error != QJsonParseError::NoError) {
+        qWarning() << "Could not parse story file";
+        qWarning() << error->errorString();
+        return false;
+    }
+
+    if (doc.isObject()) {
+        return m_storyModel->fromJsonObject(doc.object());
+    } else {
+        qWarning() << "Unexpected content of story file";
+        return false;
+    }
 }
 
 bool Project::saveStoryFile() {

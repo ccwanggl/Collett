@@ -74,13 +74,22 @@ GuiMain::GuiMain(QWidget *parent) : QMainWindow(parent) {
     return;
 }
 
+GuiMain::~GuiMain() {
+    qDebug() << "Destructor: GuiMain";
+    delete m_data;
+}
+
 /**
  * Project Functions
  * =================
  */
 
 void GuiMain::openProject(const QString &path) {
+
     m_data->openProject(path);
+    if (!m_data->hasProject()) {
+        return;
+    }
 
     QItemSelectionModel *m = m_storyTree->selectionModel();
     m_storyTree->setTreeModel(m_data->storyModel());
@@ -105,6 +114,7 @@ bool GuiMain::closeProject() {
 bool GuiMain::closeMain() {
 
     m_data->saveProject();
+    m_data->closeProject();
 
     // Save Settings
     CollettSettings *mainConf = CollettSettings::instance();

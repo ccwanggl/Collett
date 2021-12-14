@@ -31,45 +31,42 @@
 
 namespace Collett {
 
-class ProjectPrivate;
 class Project : public QObject
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(Project)
 
 public:
     Project(const QString &path);
     ~Project();
 
-private:
-    QScopedPointer<ProjectPrivate> d_ptr;
-
-public:
     // Class Methods
+
     bool openProject();
     bool saveProject();
 
-    // Getters
+    // Class Setters
+
+    void setProjectName(const QString &name);
+
+    // Class Getters
+
     QString projectName() const;
-    QString bookTitle() const;
-    bool hasProject() const;
-    bool hasError() const;
+    bool isValid() const;
     StoryModel *storyModel();
 
-    // Setters
-    void setProjectName(const QString &name);
-    void setBookTitle(const QString &title);
-
     // Error Handling
-    void    clearError();
+
+    bool hasError() const;
+    void clearError();
     QString lastError() const;
 
 private:
-    bool    m_hasProject;
+    bool    m_isValid;
     bool    m_hasError;
     QString m_lastError;
 
     // Project Paths
+
     QDir m_projectPath;
     QDir m_projectFile;
     QDir m_contentPath;
@@ -77,13 +74,21 @@ private:
     bool m_pathValid;
 
     // Project Meta
+
     QString m_collettVersion = "";
     QString m_projectVersion = "";
+    QString m_createdTime = "";
+
+    // Project Details
+
+    QString m_projectName = "New Project";
 
     // Content
+
     StoryModel *m_storyModel;
 
     // File Load & Save
+
     bool loadProjectFile();
     bool saveProjectFile();
     bool loadSettingsFile();
@@ -92,6 +97,7 @@ private:
     bool saveStoryFile();
 
     // Error Handling
+
     void setError(const QString &error);
 
 };
