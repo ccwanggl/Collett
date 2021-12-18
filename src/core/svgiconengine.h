@@ -1,6 +1,6 @@
 /*
-** Collett – GUI Tree Tool Bar Class
-** =================================
+** Collett – Core SVG Icon Engine
+** ==============================
 **
 ** This file is a part of Collett
 ** Copyright 2020–2021, Veronica Berglyd Olsen
@@ -19,28 +19,33 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "treetoolbar.h"
-#include "icons.h"
+#ifndef SVGICONENGINE_H
+#define SVGICONENGINE_H
 
-#include <QObject>
-#include <QWidget>
-#include <QToolBar>
-#include <QSizePolicy>
+#include <QIcon>
+#include <QRect>
+#include <QSize>
+#include <QPixmap>
+#include <QPainter>
+#include <QByteArray>
+#include <QIconEngine>
 
 namespace Collett {
 
-GuiTreeToolBar::GuiTreeToolBar(QWidget *parent)
-    : QToolBar(parent)
+class SVGIconEngine : public QIconEngine
 {
-    QWidget *stretch = new QWidget(this);
-    stretch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    CollettIcons *icons = CollettIcons::instance();
+public:
+    explicit SVGIconEngine(const QString &iconBuffer);
 
-    this->setOrientation(Qt::Vertical);
-    this->addAction(icons->icon("book"), tr("Story"));
-    this->addWidget(stretch);
-    this->addAction(icons->icon("settings"), tr("Settings"));
-}
+    void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state) override;
+    QIconEngine *clone() const override;
+    QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state) override;
 
+private:
+    QByteArray m_iconData;
+
+};
 } // namespace Collett
+
+#endif // SVGICONENGINE_H

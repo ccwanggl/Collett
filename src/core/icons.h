@@ -1,6 +1,6 @@
 /*
-** Collett – GUI Tree Tool Bar Class
-** =================================
+** Collett – Core Icon Repository
+** ==============================
 **
 ** This file is a part of Collett
 ** Copyright 2020–2021, Veronica Berglyd Olsen
@@ -19,28 +19,35 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "treetoolbar.h"
-#include "icons.h"
+#ifndef COLLETT_ICONS_H
+#define COLLETT_ICONS_H
 
+#include <QHash>
+#include <QIcon>
 #include <QObject>
-#include <QWidget>
-#include <QToolBar>
-#include <QSizePolicy>
+#include <QString>
+#include <QByteArray>
 
 namespace Collett {
 
-GuiTreeToolBar::GuiTreeToolBar(QWidget *parent)
-    : QToolBar(parent)
+class CollettIcons : public QObject
 {
-    QWidget *stretch = new QWidget(this);
-    stretch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    Q_OBJECT
 
-    CollettIcons *icons = CollettIcons::instance();
+public:
+    static CollettIcons *instance();
+    static void destroy();
 
-    this->setOrientation(Qt::Vertical);
-    this->addAction(icons->icon("book"), tr("Story"));
-    this->addWidget(stretch);
-    this->addAction(icons->icon("settings"), tr("Settings"));
-}
+    explicit CollettIcons();
+    ~CollettIcons();
 
+    QIcon icon(const QString &name);
+
+private:
+    static CollettIcons *staticInstance;
+    QHash<QString, QString> m_svgData;
+
+};
 } // namespace Collett
+
+#endif // COLLETT_ICONS_H
