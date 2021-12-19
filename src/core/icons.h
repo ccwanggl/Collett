@@ -27,6 +27,7 @@
 #include <QObject>
 #include <QString>
 #include <QByteArray>
+#include <QLatin1String>
 
 namespace Collett {
 
@@ -45,7 +46,7 @@ public:
 
 private:
     static CollettIcons *staticInstance;
-    QHash<QString, QString> m_svgData;
+    QHash<QString, QLatin1String> m_svgData;
 
 };
 } // namespace Collett
