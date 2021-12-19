@@ -1,6 +1,6 @@
 /*
-** Collett – GUI Document Editor Class
-** ===================================
+** Collett – GUI Text Editor Class
+** ===============================
 **
 ** This file is a part of Collett
 ** Copyright 2020–2021, Veronica Berglyd Olsen
@@ -19,29 +19,24 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "doceditor.h"
-#include "textedit.h"
-#include "edittoolbar.h"
+#ifndef GUI_TEXTEDIT_H
+#define GUI_TEXTEDIT_H
 
 #include <QObject>
 #include <QWidget>
-#include <QVBoxLayout>
+#include <QTextEdit>
 
 namespace Collett {
 
-GuiDocEditor::GuiDocEditor(QWidget *parent)
-    : QWidget(parent)
+class GuiTextEdit : public QTextEdit
 {
-    m_textArea = new GuiTextEdit(this);
-    m_editToolBar = new GuiEditToolBar(this);
+    Q_OBJECT
 
-    QVBoxLayout *outerBox = new QVBoxLayout;
-    outerBox->addWidget(m_editToolBar);
-    outerBox->addWidget(m_textArea);
-    outerBox->setContentsMargins(0, 0, 0, 0);
-    outerBox->setSpacing(0);
+public:
+    GuiTextEdit(QWidget *parent=nullptr);
+    ~GuiTextEdit() {};
 
-    this->setLayout(outerBox);
-}
-
+};
 } // namespace Collett
+
+#endif // GUI_TEXTEDIT_H

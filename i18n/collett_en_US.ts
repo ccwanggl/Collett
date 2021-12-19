@@ -2,6 +2,59 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
+    <name>Collett::GuiEditToolBar</name>
+    <message>
+        <location filename="../src/editor/edittoolbar.cpp" line="40"/>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editor/edittoolbar.cpp" line="41"/>
+        <source>Italic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editor/edittoolbar.cpp" line="42"/>
+        <source>Underline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editor/edittoolbar.cpp" line="43"/>
+        <source>Strikethrough</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editor/edittoolbar.cpp" line="47"/>
+        <source>Align Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editor/edittoolbar.cpp" line="48"/>
+        <source>Align Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editor/edittoolbar.cpp" line="49"/>
+        <source>Align Centre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editor/edittoolbar.cpp" line="50"/>
+        <source>Align Justify</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editor/edittoolbar.cpp" line="54"/>
+        <source>Indent Paragraph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editor/edittoolbar.cpp" line="55"/>
+        <source>Outdent Paragraph</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Collett::GuiMain</name>
     <message>
         <location filename="../src/guimain.cpp" line="72"/>

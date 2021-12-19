@@ -52,7 +52,7 @@ GuiMain::GuiMain(QWidget *parent) : QMainWindow(parent) {
 
     // Assemble Main Window
     m_splitMain = new QSplitter(Qt::Horizontal, this);
-    m_splitMain->setContentsMargins(4, 4, 4, 4);
+    m_splitMain->setContentsMargins(0, 0, 0, 0);
     m_splitMain->setOpaqueResize(false);
     m_splitMain->addWidget(m_storyTree);
     m_splitMain->addWidget(m_docEditor);
