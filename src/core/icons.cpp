@@ -49,52 +49,53 @@ void CollettIcons::destroy() {
 /**!
  * @brief Construct a CollettIcons object.
  * 
- * The icon SVG data is from https://remixicon.com
+ * The icon SVG data is from https://fonts.google.com/icons
+ * Icon style: Filled
  */
 CollettIcons::CollettIcons() {
 
-    // RemixIcon: archive-fill
+    // inventory_2_black_24dp.svg
     m_svgData["archive"] = QString(
-        "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'>"
-            "<path fill='none' d='M0 0h24v24H0z'/>"
-            "<path d='M3 10h18v10.004c0 .55-.445.996-.993.996H3.993A.994.994 0 0 1 3 20.004V10zm6 "
-            "2v2h6v-2H9zM2 4c0-.552.455-1 .992-1h18.016c.548 0 .992.444.992 1v4H2V4z' "
-            "fill='%1' opacity='%2'/>"
+        "<svg xmlns='http://www.w3.org/2000/svg' enable-background='new 0 0 24 24' height='24px' viewBox='0 0 24 24' width='24px' "
+            "fill='%1' opacity='%2'>"
+            "<rect fill='none' height='24' width='24'/>"
+            "<path d='M20,2H4C3,2,2,2.9,2,4v3.01C2,7.73,2.43,8.35,3,8.7V20c0,1.1,1.1,2,2,2h14c0.9,0,2-0.9,2-2V8.7c0.57-0.35,1-0.97,"
+            "1-1.69V4 C22,2.9,21,2,20,2z M15,14H9v-2h6V14z M20,7H4V4h16V7z'/>"
         "</svg>"
     );
 
-    // RemixIcon: book-fill
+    // auto_stories_black_24dp.svg
     m_svgData["book"] = QString(
-        "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'>"
-            "<path fill='none' d='M0 0h24v24H0z'/>"
-            "<path d='M20 22H6.5A3.5 3.5 0 0 1 3 18.5V5a3 3 0 0 1 3-3h14a1 1 0 0 1 1 1v18a1 1 0 0 "
-            "1-1 1zm-1-2v-3H6.5a1.5 1.5 0 0 0 0 3H19z' fill='%1' opacity='%2'/>"
+        "<svg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 0 24 24' width='24px' fill='%1' opacity='%2'>"
+            "<path d='M0 0h24v24H0V0z' fill='none'/>"
+            "<path d='M19 1l-5 5v11l5-4.5V1zM1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5"
+            " 1.5V6c-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6zm22 13.5V6c-.6-.45-1.25-.75-2-1v13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15."
+            "65-5.5 1.5v2c1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5v-1.1z'/>"
         "</svg>"
     );
 
-    // RemixIcon: more-2-fill
+    // more_vert_black_24dp.svg
     m_svgData["more"] = QString(
-        "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'>"
-            "<path fill='none' d='M0 0h24v24H0z'/><path d='M12 3c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2"
-            "-.9-2-2-2zm0 14c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-7c-1.1 0-2 .9-2 2s.9 2 "
-            "2 2 2-.9 2-2-.9-2-2-2z' fill='%1' opacity='%2'/>"
+        "<svg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 0 24 24' width='24px' fill='%1' opacity='%2'>"
+            "<path d='M0 0h24v24H0z' fill='none'/>"
+            "<path d='M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-"
+            "2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z'/>"
         "</svg>"
     );
 
-    // RemixIcon: settings-5-fill
+    // settings_black_24dp.svg
     m_svgData["settings"] = QString(
-        "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'>"
-            "<path fill='none' d='M0 0h24v24H0z'/>"
-            "<path d='M2.132 13.63a9.942 9.942 0 0 1 0-3.26c1.102.026 2.092-.502 2.477-1.431.385-."
-            "93.058-2.004-.74-2.763a9.942 9.942 0 0 1 2.306-2.307c.76.798 1.834 1.125 2.764.74.93-"
-            ".385 1.457-1.376 1.43-2.477a9.942 9.942 0 0 1 3.262 0c-.027 1.102.501 2.092 1.43 2.47"
-            "7.93.385 2.004.058 2.763-.74a9.942 9.942 0 0 1 2.307 2.306c-.798.76-1.125 1.834-.74 2"
-            ".764.385.93 1.376 1.457 2.477 1.43a9.942 9.942 0 0 1 0 3.262c-1.102-.027-2.092.501-2."
-            "477 1.43-.385.93-.058 2.004.74 2.763a9.942 9.942 0 0 1-2.306 2.307c-.76-.798-1.834-1."
-            "125-2.764-.74-.93.385-1.457 1.376-1.43 2.477a9.942 9.942 0 0 1-3.262 0c.027-1.102-.50"
-            "1-2.092-1.43-2.477-.93-.385-2.004-.058-2.763.74a9.942 9.942 0 0 1-2.307-2.306c.798-.7"
-            "6 1.125-1.834.74-2.764-.385-.93-1.376-1.457-2.477-1.43zM12 15a3 3 0 1 0 0-6 3 3 0 0 0"
-            " 0 6z' fill='%1' opacity='%2'/>"
+        "<svg xmlns='http://www.w3.org/2000/svg' enable-background='new 0 0 24 24' height='24px' viewBox='0 0 24 24' width='24px' "
+            "fill='%1' opacity='%2'>"
+            "<rect fill='none' height='24' width='24'/>"
+            "<path d='M19.5,12c0-0.23-0.01-0.45-0.03-0.68l1.86-1.41c0.4-0.3,0.51-0.86,0.26-1.3l-1.87-3.23c-0.25-0.44-0.79-0.62-1.25"
+            "-0.42 l-2.15,0.91c-0.37-0.26-0.76-0.49-1.17-0.68l-0.29-2.31C14.8,2.38,14.37,2,13.87,2h-3.73C9.63,2,9.2,2.38,9.14,2.88L"
+            "8.85,5.19 c-0.41,0.19-0.8,0.42-1.17,0.68L5.53,4.96c-0.46-0.2-1-0.02-1.25,0.42L2.41,8.62c-0.25,0.44-0.14,0.99,0.26,1.3l"
+            "1.86,1.41 C4.51,11.55,4.5,11.77,4.5,12s0.01,0.45,0.03,0.68l-1.86,1.41c-0.4,0.3-0.51,0.86-0.26,1.3l1.87,3.23c0.25,0.44,"
+            "0.79,0.62,1.25,0.42 l2.15-0.91c0.37,0.26,0.76,0.49,1.17,0.68l0.29,2.31C9.2,21.62,9.63,22,10.13,22h3.73c0.5,0,0.93-0.38"
+            ",0.99-0.88l0.29-2.31 c0.41-0.19,0.8-0.42,1.17-0.68l2.15,0.91c0.46,0.2,1,0.02,1.25-0.42l1.87-3.23c0.25-0.44,0.14-0.99-0"
+            ".26-1.3l-1.86-1.41 C19.49,12.45,19.5,12.23,19.5,12z M12.04,15.5c-1.93,0-3.5-1.57-3.5-3.5s1.57-3.5,3.5-3.5s3.5,1.57,3.5"
+            ",3.5S13.97,15.5,12.04,15.5z'/>"
         "</svg>"
     );
 }
@@ -105,7 +106,7 @@ CollettIcons::~CollettIcons() {
 
 QIcon CollettIcons::icon(const QString &name) {
     QColor col = qApp->palette().buttonText().color();
-    QString svg = m_svgData[name].arg(col.name(QColor::HexRgb)).arg("0.8");
+    QString svg = m_svgData[name].arg(col.name(QColor::HexRgb)).arg("0.7");
     return QIcon(new SVGIconEngine(svg));
 }
 
