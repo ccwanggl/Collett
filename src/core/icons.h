@@ -46,7 +46,7 @@ public:
 
 private:
     static CollettIcons *staticInstance;
-    QHash<QString, QLatin1String> m_svgData;
+    QHash<QString, QLatin1String> m_svgPath;
 
 };
 } // namespace Collett
