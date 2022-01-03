@@ -22,6 +22,8 @@
 #ifndef GUI_TEXTEDIT_H
 #define GUI_TEXTEDIT_H
 
+#include "collett.h"
+
 #include <QObject>
 #include <QWidget>
 #include <QTextEdit>
@@ -35,6 +37,9 @@ class GuiTextEdit : public QTextEdit
 public:
     GuiTextEdit(QWidget *parent=nullptr);
     ~GuiTextEdit() {};
+
+public slots:
+    void applyDocAction(DocAction action);
 
 };
 } // namespace Collett

@@ -19,6 +19,7 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "collett.h"
 #include "textedit.h"
 
 #include <QObject>
@@ -30,5 +31,9 @@ namespace Collett {
 GuiTextEdit::GuiTextEdit(QWidget *parent)
     : QTextEdit(parent)
 {}
+
+void GuiTextEdit::applyDocAction(DocAction action) {
+    qDebug() << "DocAction:" << action;
+}
 
 } // namespace Collett

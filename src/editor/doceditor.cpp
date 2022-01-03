@@ -19,6 +19,7 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "collett.h"
 #include "doceditor.h"
 #include "textedit.h"
 #include "edittoolbar.h"
@@ -34,6 +35,7 @@ GuiDocEditor::GuiDocEditor(QWidget *parent)
 {
     m_textArea = new GuiTextEdit(this);
     m_editToolBar = new GuiEditToolBar(this);
+    connect(m_editToolBar, SIGNAL(documentAction(DocAction)), m_textArea, SLOT(applyDocAction(DocAction)));
 
     QVBoxLayout *outerBox = new QVBoxLayout;
     outerBox->addWidget(m_editToolBar);
@@ -42,6 +44,8 @@ GuiDocEditor::GuiDocEditor(QWidget *parent)
     outerBox->setSpacing(0);
 
     this->setLayout(outerBox);
+    m_textArea->setHtml("<b>Hello World</b>");
+    qDebug() << "QTextDocument:" << sizeof(m_textArea->document());
 }
 
 } // namespace Collett

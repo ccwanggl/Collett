@@ -19,6 +19,7 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "collett.h"
 #include "edittoolbar.h"
 #include "icons.h"
 
@@ -42,6 +43,11 @@ GuiEditToolBar::GuiEditToolBar(QWidget *parent)
     m_formatUnderline = this->addAction(icons->icon("underline"), tr("Underline"));
     m_formatStrikethrough = this->addAction(icons->icon("strikethrough"), tr("Strikethrough"));
 
+    connect(m_formatBold, &QAction::triggered, [this]{emitDocumentAction(DocAction::FormatBold);});
+    connect(m_formatItalic, &QAction::triggered, [this]{emitDocumentAction(DocAction::FormatItalic);});
+    connect(m_formatUnderline, &QAction::triggered, [this]{emitDocumentAction(DocAction::FormatUnderline);});
+    connect(m_formatStrikethrough, &QAction::triggered, [this]{emitDocumentAction(DocAction::FormatStrikethrough);});
+
     this->addSeparator();
 
     m_alignLeft = this->addAction(icons->icon("alignLeft"), tr("Align Left"));
@@ -49,10 +55,22 @@ GuiEditToolBar::GuiEditToolBar(QWidget *parent)
     m_alignRight = this->addAction(icons->icon("alignRight"), tr("Align Centre"));
     m_alignJustify = this->addAction(icons->icon("alignJustify"), tr("Align Justify"));
 
+    connect(m_alignLeft, &QAction::triggered, [this]{emitDocumentAction(DocAction::TextAlignLeft);});
+    connect(m_alignCentre, &QAction::triggered, [this]{emitDocumentAction(DocAction::TextAlignCentre);});
+    connect(m_alignRight, &QAction::triggered, [this]{emitDocumentAction(DocAction::TextAlignRight);});
+    connect(m_alignJustify, &QAction::triggered, [this]{emitDocumentAction(DocAction::TextAlignJustify);});
+
     this->addSeparator();
 
     m_blockIndent = this->addAction(icons->icon("blockIndent"), tr("Indent Paragraph"));
     m_blockOutdent = this->addAction(icons->icon("blockOutdent"), tr("Outdent Paragraph"));
+
+    connect(m_blockIndent, &QAction::triggered, [this]{emitDocumentAction(DocAction::TextIndent);});
+    connect(m_blockOutdent, &QAction::triggered, [this]{emitDocumentAction(DocAction::TextOutdent);});
+}
+
+void GuiEditToolBar::emitDocumentAction(DocAction action) {
+    emit documentAction(action);
 }
 
 } // namespace Collett

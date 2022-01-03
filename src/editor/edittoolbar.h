@@ -22,6 +22,8 @@
 #ifndef GUI_EDITTOOLBAR_H
 #define GUI_EDITTOOLBAR_H
 
+#include "collett.h"
+
 #include <QAction>
 #include <QObject>
 #include <QToolBar>
@@ -36,6 +38,9 @@ public:
     GuiEditToolBar(QWidget *parent=nullptr);
     ~GuiEditToolBar() {};
 
+signals:
+    void documentAction(DocAction action);
+
 private:
     QAction *m_formatBold;
     QAction *m_formatItalic;
@@ -49,6 +54,9 @@ private:
 
     QAction *m_blockIndent;
     QAction *m_blockOutdent;
+
+private slots:
+    void emitDocumentAction(DocAction action);
 
 };
 } // namespace Collett

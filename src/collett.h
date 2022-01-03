@@ -26,4 +26,21 @@
 #define COL_VERSION_NUM  0x000001a0
 #define COL_VERSION_DATE "2021-11-14"
 
+namespace Collett {
+
+enum DocAction {
+    FormatBold,
+    FormatItalic,
+    FormatUnderline,
+    FormatStrikethrough,
+    TextAlignLeft,
+    TextAlignCentre,
+    TextAlignRight,
+    TextAlignJustify,
+    TextIndent,
+    TextOutdent,
+};
+
+} // namespace Collett
+
 #endif // COLLETT_H
