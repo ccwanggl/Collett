@@ -1,5 +1,5 @@
 /*
-** Collett – GUI Document Editor Class
+** Collett – GUI Editor Tool Bar Class
 ** ===================================
 **
 ** This file is a part of Collett
@@ -19,33 +19,46 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "collett.h"
-#include "doceditor.h"
-#include "textedit.h"
-#include "edittoolbar.h"
+#ifndef GUI_EDITTOOLBAR_H
+#define GUI_EDITTOOLBAR_H
 
+#include "collett.h"
+
+#include <QAction>
 #include <QObject>
-#include <QWidget>
-#include <QVBoxLayout>
+#include <QToolBar>
 
 namespace Collett {
 
-GuiDocEditor::GuiDocEditor(QWidget *parent)
-    : QWidget(parent)
+class GuiEditToolBar : public QToolBar
 {
-    m_textArea = new GuiTextEdit(this);
-    m_editToolBar = new GuiEditToolBar(this);
-    connect(m_editToolBar, SIGNAL(documentAction(DocAction)), m_textArea, SLOT(applyDocAction(DocAction)));
+    Q_OBJECT
 
-    QVBoxLayout *outerBox = new QVBoxLayout;
-    outerBox->addWidget(m_editToolBar);
-    outerBox->addWidget(m_textArea);
-    outerBox->setContentsMargins(0, 0, 0, 0);
-    outerBox->setSpacing(0);
+public:
+    GuiEditToolBar(QWidget *parent=nullptr);
+    ~GuiEditToolBar() {};
 
-    this->setLayout(outerBox);
-    m_textArea->setHtml("<b>Hello World</b>");
-    qDebug() << "QTextDocument:" << sizeof(m_textArea->document());
-}
+signals:
+    void documentAction(DocAction action);
 
+private:
+    QAction *m_formatBold;
+    QAction *m_formatItalic;
+    QAction *m_formatUnderline;
+    QAction *m_formatStrikethrough;
+
+    QAction *m_alignLeft;
+    QAction *m_alignCentre;
+    QAction *m_alignRight;
+    QAction *m_alignJustify;
+
+    QAction *m_blockIndent;
+    QAction *m_blockOutdent;
+
+private slots:
+    void emitDocumentAction(DocAction action);
+
+};
 } // namespace Collett
+
+#endif // GUI_EDITTOOLBAR_H

@@ -3,7 +3,7 @@
 ** ==============================
 **
 ** This file is a part of Collett
-** Copyright 2020–2021, Veronica Berglyd Olsen
+** Copyright 2020–2022, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include <QObject>
 #include <QString>
 #include <QByteArray>
+#include <QLatin1String>
 
 namespace Collett {
 
@@ -45,7 +46,7 @@ public:
 
 private:
     static CollettIcons *staticInstance;
-    QHash<QString, QString> m_svgData;
+    QHash<QString, QLatin1String> m_svgPath;
 
 };
 } // namespace Collett

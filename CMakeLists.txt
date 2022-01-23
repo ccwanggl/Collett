@@ -87,6 +87,8 @@ list(APPEND SRC_FILES
     src/core/storage
     src/core/svgiconengine
     src/editor/doceditor
+    src/editor/edittoolbar
+    src/editor/textedit
     src/gui/maintoolbar
     src/gui/statusbar
     src/gui/storytree

@@ -3,7 +3,7 @@
 ** ========================
 **
 ** This file is a part of Collett
-** Copyright 2020–2021, Veronica Berglyd Olsen
+** Copyright 2020–2022, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ GuiMain::GuiMain(QWidget *parent) : QMainWindow(parent) {
 
     // Assemble Main Window
     m_splitMain = new QSplitter(Qt::Horizontal, this);
-    m_splitMain->setContentsMargins(4, 4, 4, 4);
+    m_splitMain->setContentsMargins(0, 0, 0, 0);
     m_splitMain->setOpaqueResize(false);
     m_splitMain->addWidget(m_storyTree);
     m_splitMain->addWidget(m_docEditor);

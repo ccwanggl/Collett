@@ -3,7 +3,7 @@
 ** =============================
 **
 ** This file is a part of Collett
-** Copyright 2020–2021, Veronica Berglyd Olsen
+** Copyright 2020–2022, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -25,5 +25,22 @@
 #define COL_VERSION_STR  "0.0.1-alpha0"
 #define COL_VERSION_NUM  0x000001a0
 #define COL_VERSION_DATE "2021-11-14"
+
+namespace Collett {
+
+enum DocAction {
+    FormatBold,
+    FormatItalic,
+    FormatUnderline,
+    FormatStrikethrough,
+    TextAlignLeft,
+    TextAlignCentre,
+    TextAlignRight,
+    TextAlignJustify,
+    TextIndent,
+    TextOutdent,
+};
+
+} // namespace Collett
 
 #endif // COLLETT_H
