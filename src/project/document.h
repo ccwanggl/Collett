@@ -1,6 +1,6 @@
 /*
-** Collett – GUI Editor Tool Bar Class
-** ===================================
+** Collett – Document Class
+** ========================
 **
 ** This file is a part of Collett
 ** Copyright 2020–2022, Veronica Berglyd Olsen
@@ -19,51 +19,56 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef GUI_EDITTOOLBAR_H
-#define GUI_EDITTOOLBAR_H
+#ifndef COLLETT_DOCUMENT_H
+#define COLLETT_DOCUMENT_H
 
 #include "collett.h"
+#include "storage.h"
 
-#include <QAction>
+#include <QUuid>
 #include <QObject>
-#include <QToolBar>
+#include <QJsonArray>
 
 namespace Collett {
 
-
-class GuiDocEditor;
-class GuiEditToolBar : public QToolBar
+class Document : public QObject
 {
     Q_OBJECT
 
 public:
-    GuiEditToolBar(QWidget *parent=nullptr);
-    ~GuiEditToolBar() {};
+    enum Mode {ReadOnly, ReadWrite};
 
-signals:
-    void documentAction(DocAction action);
+    explicit Document(Storage *store, const QUuid uuid, Mode mode=Mode::ReadOnly);
+    ~Document() {};
+
+    // Getters
+
+    bool isEmpty() const;
+    bool isExisting() const;
+    bool isUnsaved() const;
+    QJsonArray content() const;
+    QUuid handle() const;
+
+    // Methods
+
+    bool open(const Mode mode);
+    bool save(const QJsonArray &content);
+    bool save();
 
 private:
-    QAction *m_formatBold;
-    QAction *m_formatItalic;
-    QAction *m_formatUnderline;
-    QAction *m_formatStrikethrough;
+    Storage *m_store;
+    QUuid    m_handle;
+    bool     m_empty;
+    bool     m_existing;
+    bool     m_unsaved;
+    Mode     m_mode;
 
-    QAction *m_alignLeft;
-    QAction *m_alignCentre;
-    QAction *m_alignRight;
-    QAction *m_alignJustify;
+    // Data Variables
 
-    QAction *m_textIndent;
-    QAction *m_blockIndent;
-    QAction *m_blockOutdent;
-
-private slots:
-    void emitDocumentAction(DocAction action);
-
-    friend class GuiDocEditor;
+    QString    m_created;
+    QJsonArray m_content;
 
 };
 } // namespace Collett
 
-#endif // GUI_EDITTOOLBAR_H
+#endif // COLLETT_DOCUMENT_H

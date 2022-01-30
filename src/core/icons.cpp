@@ -43,6 +43,7 @@ CollettIcons *CollettIcons::instance() {
 
 void CollettIcons::destroy() {
     if (staticInstance != nullptr) {
+        qDebug() << "Destructor: Static CollettIcons";
         delete CollettIcons::staticInstance;
     }
 }
@@ -150,6 +151,11 @@ CollettIcons::CollettIcons() {
         "M22,7h-2v1h3v1h-4V7c0-0.55,0.45-1,1-1h2V5h-3V4h3c0.55,0,1,0.45,1,1v1C23,6.55,22.55,7,22,7"
         "z M5.88,20h2.66l3.4-5.42h0.12 l3.4,5.42h2.66l-4.65-7.27L17.81,6h-2.68l-3.07,4.99h-0.12L8."
         "85,6H6.19l4.32,6.73L5.88,20z"
+    );
+
+    // subject_black_24dp.svg (rotated 180 degrees)
+    m_svgPath["textIndent"] = QLatin1String(
+        "m10 7h10v-2h-10zm-6 8h16v-2h-16zm16-6h-16v2h16zm0 10v-2h-16v2z"
     );
 
     // format_underlined_black_24dp.svg

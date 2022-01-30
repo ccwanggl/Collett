@@ -22,11 +22,17 @@
 #ifndef GUI_DOCEDITOR_H
 #define GUI_DOCEDITOR_H
 
+#include "collett.h"
+#include "data.h"
 #include "textedit.h"
+#include "document.h"
 #include "edittoolbar.h"
 
+#include <QUuid>
 #include <QObject>
 #include <QWidget>
+#include <QTextBlock>
+#include <QTextCharFormat>
 
 namespace Collett {
 
@@ -38,9 +44,31 @@ public:
     GuiDocEditor(QWidget *parent=nullptr);
     ~GuiDocEditor() {};
 
+    // Data Methods
+
+    bool openDocument(const QUuid &uuid);
+    bool saveDocument();
+    void closeDocument();
+
+    // Status Methods
+
+    QUuid currentDocument() const;
+    bool hasDocument() const;
+
+signals:
+    void popMessage(const Collett::Severity type, const QString &message);
+
 private:
     GuiTextEdit *m_textArea;
     GuiEditToolBar *m_editToolBar;
+
+    CollettData *m_data;
+    Document *m_document;
+    QUuid m_docUuid;
+
+private slots:
+    void editorCharFormatChanged(const QTextCharFormat &fmt);
+    void editorBlockChanged(const QTextBlock &block);
 
 };
 } // namespace Collett

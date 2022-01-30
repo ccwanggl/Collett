@@ -38,7 +38,15 @@ enum DocAction {
     TextAlignRight,
     TextAlignJustify,
     TextIndent,
-    TextOutdent,
+    BlockIndent,
+    BlockOutdent,
+};
+
+enum Severity {
+    Information,
+    Warning,
+    Error,
+    Bug,
 };
 
 } // namespace Collett

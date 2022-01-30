@@ -23,10 +23,16 @@
 #define GUI_TEXTEDIT_H
 
 #include "collett.h"
+#include "settings.h"
+#include "data.h"
 
 #include <QObject>
 #include <QWidget>
 #include <QTextEdit>
+#include <QJsonArray>
+#include <QTextBlock>
+#include <QTextCharFormat>
+#include <QTextBlockFormat>
 
 namespace Collett {
 
@@ -38,8 +44,22 @@ public:
     GuiTextEdit(QWidget *parent=nullptr);
     ~GuiTextEdit() {};
 
+    QJsonArray toJsonContent();
+    void setJsonContent(const QJsonArray &json);
+
+private:
+    CollettSettings::TextFormat m_format;
+
+    int m_currentBlockNo = -1;
+
+signals:
+    void currentBlockChanged(const QTextBlock &block);
+
 public slots:
     void applyDocAction(DocAction action);
+
+private slots:
+    void processCursorPositionChanged();
 
 };
 } // namespace Collett

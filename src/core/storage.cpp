@@ -24,6 +24,7 @@
 
 #include <QDir>
 #include <QFile>
+#include <QList>
 #include <QUuid>
 #include <QString>
 #include <QFileInfo>
@@ -81,7 +82,11 @@ bool Storage::loadFile(const QString &fileName, QJsonObject &fileData) {
 }
 
 bool Storage::loadFile(const QUuid &fileUuid, QJsonObject &fileData) {
-    return true;
+    if (!ensureFolder("content")) {
+        return false;
+    }
+    QString filePath = QDir(m_rootPath.path() + "/content").filePath(fileUuid.toString(QUuid::WithoutBraces) + ".json");
+    return readJson(filePath, fileData);
 }
 
 bool Storage::saveFile(const QString &fileName, const QJsonObject &fileData) {
@@ -93,7 +98,11 @@ bool Storage::saveFile(const QString &fileName, const QJsonObject &fileData) {
 }
 
 bool Storage::saveFile(const QUuid &fileUuid, const QJsonObject &fileData) {
-    return true;
+    if (!ensureFolder("content")) {
+        return false;
+    }
+    QString filePath = QDir(m_rootPath.path() + "/content").filePath(fileUuid.toString(QUuid::WithoutBraces) + ".json");
+    return writeJson(filePath, fileData);
 }
 
 bool Storage::loadProjectFile() {
@@ -147,6 +156,33 @@ bool Storage::saveProjectFile() {
     } else {
         return false;
     }
+}
+
+QList<QUuid> Storage::listContent() const {
+
+    if (!m_isValid) {
+        return QList<QUuid>();
+    }
+
+    QList<QUuid> result;
+
+    QDir contentPath = QDir(m_rootPath.path() + "/content");
+    QStringList jsonFiles = contentPath.entryList(QStringList() << "*.json", QDir::Files);
+
+    for (const QString &entry : jsonFiles) {
+        if (entry.length() != 41) {
+            qWarning() << "Unknown content:" << entry;
+            continue;
+        }
+        QUuid uuid(entry.first(36));
+        if (uuid.isNull()) {
+            qWarning() << "Skipped content:" << entry;
+            continue;
+        }
+        result << uuid;
+    }
+
+    return result;
 }
 
 bool Storage::isValid() {
@@ -218,6 +254,8 @@ bool Storage::readJson(const QString &filePath, QJsonObject &fileData) {
     }
 
     fileData = json.object();
+    qDebug() << "Read:" << filePath;
+
     return true;
 }
 
@@ -231,8 +269,21 @@ bool Storage::writeJson(const QString &filePath, const QJsonObject &fileData) {
     }
 
     QJsonDocument doc(fileData);
-    file.write(doc.toJson());
+    QByteArray jsonData = doc.toJson(m_compactJson ? QJsonDocument::Compact : QJsonDocument::Indented);
+
+    if (m_compactJson) {
+        file.write(jsonData);
+    } else {
+        for (QByteArray line: jsonData.split('\n')) {
+            QByteArray trimmed = line.trimmed();
+            if (trimmed.length() > 0) {
+                file.write(QByteArray((line.length() - trimmed.length())/4, '\t') + trimmed + '\n');
+            }
+        }
+    }
     file.close();
+    qDebug() << "Wrote:" << filePath;
+
     return true;
 }
 

@@ -25,37 +25,74 @@
 #include "collett.h"
 
 #include <QList>
+#include <QSize>
 #include <QObject>
 #include <QScopedPointer>
-#include <QSize>
+#include <QTextCharFormat>
+#include <QTextBlockFormat>
 
 namespace Collett {
 
-class CollettSettingsPrivate;
 class CollettSettings : public QObject
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(CollettSettings)
 
 public:
+    struct TextFormat {
+        QTextBlockFormat blockDefault;
+        QTextCharFormat  charDefault;
+        QTextBlockFormat blockParagraph;
+        QTextCharFormat  charParagraph;
+        QTextBlockFormat blockHeader1;
+        QTextCharFormat  charHeader1;
+        QTextBlockFormat blockHeader2;
+        QTextCharFormat  charHeader2;
+        QTextBlockFormat blockHeader3;
+        QTextCharFormat  charHeader3;
+        QTextBlockFormat blockHeader4;
+        QTextCharFormat  charHeader4;
+        qreal fontSize;
+        qreal textIndent;
+        qreal lineHeight;
+    };
+
     static CollettSettings *instance();
     static void destroy();
+
+    explicit CollettSettings();
     ~CollettSettings();
 
-private:
-    QScopedPointer<CollettSettingsPrivate> d_ptr;
-    CollettSettings();
-
-public:
     void flushSettings();
 
     // Setters
+
     void setMainWindowSize(const QSize size);
     void setMainSplitSizes(const QList<int> &sizes);
+    void setTextFontSize(const qreal size);
 
     // Getters
+
     QSize      mainWindowSize() const;
     QList<int> mainSplitSizes() const;
+    TextFormat textFormat() const;
+
+private:
+    static CollettSettings *staticInstance;
+
+    // GUI Settings
+
+    QSize      m_mainWindowSize;
+    QList<int> m_mainSplitSizes;
+
+    // Text Format
+
+    qreal      m_textFontSize;
+    TextFormat m_textFormat;
+
+    // Internal Functions
+
+    void recalculateTextFormats();
+
 };
 } // namespace Collett
 
