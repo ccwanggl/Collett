@@ -44,6 +44,16 @@ public:
     GuiTextEdit(QWidget *parent=nullptr);
     ~GuiTextEdit() {};
 
+    // Setters
+
+    void setModified(bool state);
+
+    // Getters
+
+    bool isModified() const;
+
+    // Methods
+
     QJsonArray toJsonContent();
     void setJsonContent(const QJsonArray &json);
 
@@ -51,6 +61,8 @@ private:
     CollettSettings::TextFormat m_format;
 
     int m_currentBlockNo = -1;
+
+    void initDocument(QTextDocument *doc);
 
 signals:
     void currentBlockChanged(const QTextBlock &block);

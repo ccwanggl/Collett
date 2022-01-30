@@ -46,12 +46,7 @@ GuiTextEdit::GuiTextEdit(QWidget *parent)
 {
     // Settings
     setAcceptRichText(true);
-
-    // Text Options
-    QTextOption opts;
-    opts.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
-    document()->setDefaultTextOption(opts);
-    document()->setDocumentMargin(40);
+    initDocument(this->document());
 
     CollettSettings *settings = CollettSettings::instance();
     m_format = settings->textFormat();
@@ -61,13 +56,36 @@ GuiTextEdit::GuiTextEdit(QWidget *parent)
 }
 
 /**
- * Methods
- * =======
+ * Class Setters
+ * =============
+ */
+
+void GuiTextEdit::setModified(bool state) {
+    this->document()->setModified(state);
+}
+
+/**
+ * Class Getters
+ * =============
+ */
+
+bool GuiTextEdit::isModified() const {
+    return this->document()->isModified();
+}
+
+/**
+ * Class Methods
+ * =============
  */
 
 QJsonArray GuiTextEdit::toJsonContent() {
 
     QJsonArray json;
+
+    if (this->document()->blockCount() == 1 && this->document()->firstBlock().text().trimmed().isEmpty()) {
+        // No text content
+        return json;
+    }
 
     QTextBlock block = this->document()->firstBlock();
     while(block.isValid()) {
@@ -148,12 +166,13 @@ QJsonArray GuiTextEdit::toJsonContent() {
 
 void GuiTextEdit::setJsonContent(const QJsonArray &json) {
 
-    QTextDocument *doc = this->document();
+    QTextDocument *doc = new QTextDocument(this);
     QTextCursor cursor = QTextCursor(doc);
     bool isFirst = true;
 
     doc->setUndoRedoEnabled(false);
     doc->clear();
+    initDocument(doc);
 
     for (const QJsonValue &jsonBlockValue : json) {
 
@@ -264,6 +283,24 @@ void GuiTextEdit::setJsonContent(const QJsonArray &json) {
     }
 
     doc->setUndoRedoEnabled(true);
+    doc->setModified(false);
+
+    this->setDocument(doc);
+}
+
+/**
+ * Internal Functions
+ * ==================
+ */
+
+void GuiTextEdit::initDocument(QTextDocument *doc) {
+
+    // Text Options
+    QTextOption opts;
+    opts.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    doc->setDefaultTextOption(opts);
+    doc->setDocumentMargin(40);
+
 }
 
 /**
