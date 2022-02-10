@@ -28,9 +28,11 @@
 #define CNF_EDITOR_AUTO_SAVE "Editor/autoSave"
 
 #define CNF_TEXT_FONT_SIZE "TextFormat/fontSize"
+#define CNF_TEXT_TAB_WIDTH "TextFormat/tabWidth"
 
 #include <algorithm>
 
+#include <QFont>
 #include <QList>
 #include <QSize>
 #include <QVariant>
@@ -112,6 +114,7 @@ CollettSettings::CollettSettings() {
     // -----------
 
     m_textFontSize = std::max(settings.value(CNF_TEXT_FONT_SIZE, (qreal)13.0).toReal(), 5.0);
+    m_textTabWidth = std::max(settings.value(CNF_TEXT_TAB_WIDTH, (qreal)40.0).toReal(), 0.0);
     recalculateTextFormats();
 
 }
@@ -202,17 +205,17 @@ void CollettSettings::recalculateTextFormats() {
     qreal defaultTopMargin = 0.5 * m_textFontSize;
     qreal defaultBottomMargin = 0.5 * m_textFontSize;
 
-    qreal header1FontSize = 2.2*m_textFontSize;
-    qreal header2FontSize = 1.9*m_textFontSize;
-    qreal header3FontSize = 1.6*m_textFontSize;
-    qreal header4FontSize = 1.3*m_textFontSize;
+    qreal header1FontSize = 2.0*m_textFontSize;
+    qreal header2FontSize = 1.7*m_textFontSize;
+    qreal header3FontSize = 1.4*m_textFontSize;
+    qreal header4FontSize = 1.2*m_textFontSize;
 
     qreal headerBottomMargin = 0.7 * m_textFontSize;
 
     // Text Format Values
 
     m_textFormat.fontSize = m_textFontSize;
-    m_textFormat.textIndent = 2.0 * m_textFontSize;
+    m_textFormat.tabWidth = m_textTabWidth;
     m_textFormat.lineHeight = 1.15;
 
     // Default Text Formats
@@ -241,6 +244,7 @@ void CollettSettings::recalculateTextFormats() {
 
     m_textFormat.charHeader1 = defaultCharFmt;
     m_textFormat.charHeader1.setFontPointSize(header1FontSize);
+    m_textFormat.charHeader1.setFontWeight(QFont::Bold);
 
     // Header 2 Formats
 
@@ -251,6 +255,7 @@ void CollettSettings::recalculateTextFormats() {
 
     m_textFormat.charHeader2 = defaultCharFmt;
     m_textFormat.charHeader2.setFontPointSize(header2FontSize);
+    m_textFormat.charHeader2.setFontWeight(QFont::Bold);
 
     // Header 3 Formats
 
@@ -261,6 +266,7 @@ void CollettSettings::recalculateTextFormats() {
 
     m_textFormat.charHeader3 = defaultCharFmt;
     m_textFormat.charHeader3.setFontPointSize(header3FontSize);
+    m_textFormat.charHeader3.setFontWeight(QFont::Bold);
 
     // Header 4 Formats
 
@@ -271,6 +277,7 @@ void CollettSettings::recalculateTextFormats() {
 
     m_textFormat.charHeader4 = defaultCharFmt;
     m_textFormat.charHeader4.setFontPointSize(header4FontSize);
+    m_textFormat.charHeader4.setFontWeight(QFont::Bold);
 
 }
 

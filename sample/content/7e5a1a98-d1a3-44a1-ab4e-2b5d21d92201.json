@@ -1,6 +1,7 @@
 {
+	"c:format": "document",
 	"m:created": "2022-01-29T18:22:54",
-	"m:updated": "2022-01-29T18:23:42",
+	"m:updated": "2022-02-10T22:57:01",
 	"x:content": [
 		{
 			"u:fmt": "h3:al",
@@ -23,7 +24,9 @@
 		{
 			"u:fmt": "p:al:ti",
 			"x:txt": [
-				"t|Here is a paragraph with no formatting whatsoever.\nThis is a second line in the same ",
+				"t|Here is a paragraph",
+				"t:sup|23",
+				"t| with no formatting whatsoever.\nThis is a second line in the same ",
 				"t:s|silly",
 				"t| paragraph."
 			]
@@ -45,11 +48,7 @@
 			"u:txt": "t|This text belongs to a second section of the text document."
 		},
 		{
-			"u:fmt": "p:al",
-			"u:txt": "t|"
-		},
-		{
-			"u:fmt": "p:al",
+			"u:fmt": "h4:al",
 			"u:txt": "t:b|Song time!"
 		},
 		{

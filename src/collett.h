@@ -28,20 +28,6 @@
 
 namespace Collett {
 
-enum DocAction {
-    FormatBold,
-    FormatItalic,
-    FormatUnderline,
-    FormatStrikethrough,
-    TextAlignLeft,
-    TextAlignCentre,
-    TextAlignRight,
-    TextAlignJustify,
-    TextIndent,
-    BlockIndent,
-    BlockOutdent,
-};
-
 enum Severity {
     Information,
     Warning,

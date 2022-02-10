@@ -24,9 +24,12 @@
 
 #include "collett.h"
 
+#include <QMenu>
 #include <QAction>
 #include <QObject>
 #include <QToolBar>
+#include <QToolButton>
+#include <QActionGroup>
 
 namespace Collett {
 
@@ -40,26 +43,36 @@ public:
     GuiEditToolBar(QWidget *parent=nullptr);
     ~GuiEditToolBar() {};
 
-signals:
-    void documentAction(DocAction action);
-
 private:
+    QActionGroup *m_formatTextGroup;
+    QActionGroup *m_alignTextGroup;
+
+    QToolButton *m_formatText;
+    QMenu       *m_formatTextMenu;
+    QAction     *m_formatHeader1;
+    QAction     *m_formatHeader2;
+    QAction     *m_formatHeader3;
+    QAction     *m_formatHeader4;
+    QAction     *m_formatParagraph;
+    QAction     *m_formatBlockQuote;
+
     QAction *m_formatBold;
     QAction *m_formatItalic;
     QAction *m_formatUnderline;
-    QAction *m_formatStrikethrough;
+    QAction *m_formatStrikeOut;
+
+    QAction *m_formatSuperScript;
+    QAction *m_formatSubScript;
 
     QAction *m_alignLeft;
     QAction *m_alignCentre;
     QAction *m_alignRight;
     QAction *m_alignJustify;
 
+    QAction *m_textSegment;
     QAction *m_textIndent;
     QAction *m_blockIndent;
     QAction *m_blockOutdent;
-
-private slots:
-    void emitDocumentAction(DocAction action);
 
     friend class GuiDocEditor;
 

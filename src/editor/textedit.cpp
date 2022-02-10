@@ -115,6 +115,8 @@ QJsonArray GuiTextEdit::toJsonContent() {
         // Text Indent
         if (blockFormat.textIndent() > 0.0) {
             jsonBlockFmt << "ti";
+        } else if (blockFormat.textIndent() < 0.0) {
+            jsonBlockFmt << "sg";
         }
 
         // Block Indent
@@ -140,6 +142,8 @@ QJsonArray GuiTextEdit::toJsonContent() {
             if (fragFmt.fontItalic()) jsonFragFmt << "i";
             if (fragFmt.fontUnderline()) jsonFragFmt << "u";
             if (fragFmt.fontStrikeOut()) jsonFragFmt << "s";
+            if (fragFmt.verticalAlignment() == QTextCharFormat::AlignSuperScript) jsonFragFmt << "sup";
+            if (fragFmt.verticalAlignment() == QTextCharFormat::AlignSubScript) jsonFragFmt << "sub";
 
             jsonFrags.append(jsonFragFmt.join(":") + "|" + blockFrag.text().replace(QChar::LineSeparator, '\n'));
         }
@@ -226,7 +230,10 @@ void GuiTextEdit::setJsonContent(const QJsonArray &json) {
             } else if (blockFmtTag == "aj") {
                 blockFormat.setAlignment(Qt::AlignJustify);
             } else if (blockFmtTag == "ti") {
-                blockFormat.setTextIndent(m_format.textIndent);
+                blockFormat.setTextIndent(m_format.tabWidth);
+            } else if (blockFmtTag == "sg") {
+                blockFormat.setTextIndent(-m_format.tabWidth);
+                blockFormat.setLeftMargin(m_format.tabWidth);
             } else if (blockFmtTag.startsWith("in")) {
                 blockFormat.setIndent(blockFmtTag.last(1).toInt());
             }
@@ -272,6 +279,10 @@ void GuiTextEdit::setJsonContent(const QJsonArray &json) {
                     fragFormat.setFontUnderline(true);
                 } else if (fragFmtTag == "s") {
                     fragFormat.setFontStrikeOut(true);
+                } else if (fragFmtTag == "sup") {
+                    fragFormat.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+                } else if (fragFmtTag == "sub") {
+                    fragFormat.setVerticalAlignment(QTextCharFormat::AlignSubScript);
                 }
             }
 
@@ -301,6 +312,8 @@ void GuiTextEdit::initDocument(QTextDocument *doc) {
     doc->setDefaultTextOption(opts);
     doc->setDocumentMargin(40);
 
+    // Editor Options
+    this->setTabStopDistance(m_format.tabWidth);
 }
 
 /**
@@ -308,80 +321,138 @@ void GuiTextEdit::initDocument(QTextDocument *doc) {
  * ============
  */
 
-void GuiTextEdit::applyDocAction(DocAction action) {
-
-    bool blockChanged = false;
-
-    if (action == Collett::FormatBold) {
-        if (fontWeight() > QFont::Medium) {
-            setFontWeight(QFont::Normal);
-        } else {
-            setFontWeight(QFont::Bold);
-        }
-
-    } else if (action == Collett::FormatItalic) {
-        setFontItalic(!fontItalic());
-
-    } else if (action == Collett::FormatUnderline) {
-        setFontUnderline(!fontUnderline());
-
-    } else if (action == Collett::FormatStrikethrough) {
-        QFont font = currentFont();
-        font.setStrikeOut(!font.strikeOut());
-        setCurrentFont(font);
-
-    } else if (action == Collett::TextAlignLeft) {
-        setAlignment(Qt::AlignLeft);
-        blockChanged = true;
-
-    } else if (action == Collett::TextAlignCentre) {
-        setAlignment(Qt::AlignHCenter);
-        blockChanged = true;
-
-    } else if (action == Collett::TextAlignRight) {
-        setAlignment(Qt::AlignRight);
-        blockChanged = true;
-
-    } else if (action == Collett::TextAlignJustify) {
-        setAlignment(Qt::AlignJustify);
-        blockChanged = true;
-
-    } else if (action == Collett::TextIndent) {
-        QTextCursor cursor = textCursor();
-        QTextBlockFormat format = cursor.blockFormat();
-        if (format.headingLevel() == 0 && format.alignment() == Qt::AlignLeading) {
-            if (format.textIndent() > 0.0) {
-                format.setTextIndent(0.0);
-            } else {
-                format.setTextIndent(m_format.textIndent);
-            }
-            cursor.setBlockFormat(format);
-        }
-        blockChanged = true;
-
-    } else if (action == Collett::BlockIndent) {
-        QTextCursor cursor = textCursor();
-        QTextBlockFormat format = cursor.blockFormat();
-        if (format.headingLevel() == 0 && format.alignment() == Qt::AlignLeading) {
-            format.setIndent(std::min(format.indent() + 1, 9));
-            cursor.setBlockFormat(format);
-        }
-        blockChanged = true;
-
-    } else if (action == Collett::BlockOutdent) {
-        QTextCursor cursor = textCursor();
-        QTextBlockFormat format = cursor.blockFormat();
-        if (format.headingLevel() == 0 && format.alignment() == Qt::AlignLeading) {
-            format.setIndent(std::max(format.indent() - 1, 0));
-            cursor.setBlockFormat(format);
-        }
-        blockChanged = true;
+void GuiTextEdit::toggleBoldFormat() {
+    if (this->fontWeight() > QFont::Medium) {
+        this->setFontWeight(QFont::Normal);
+    } else {
+        this->setFontWeight(QFont::Bold);
     }
+}
 
-    if (blockChanged) {
-        QTextCursor cursor = textCursor();
+void GuiTextEdit::toggleItalicFormat() {
+    this->setFontItalic(!this->fontItalic());
+}
+
+void GuiTextEdit::toggleUnderlineFormat() {
+    this->setFontUnderline(!this->fontUnderline());
+}
+
+void GuiTextEdit::toggleStrikeOutFormat() {
+    QFont font = this->currentFont();
+    font.setStrikeOut(!font.strikeOut());
+    this->setCurrentFont(font);
+}
+
+void GuiTextEdit::toggleSuperScriptFormat() {
+    QTextCharFormat fmt = this->currentCharFormat();
+    if (fmt.verticalAlignment() == QTextCharFormat::AlignSuperScript) {
+        fmt.setVerticalAlignment(QTextCharFormat::AlignNormal);
+    } else {
+        fmt.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    }
+    this->setCurrentCharFormat(fmt);
+}
+
+void GuiTextEdit::toggleSubScriptFormat() {
+    QTextCharFormat fmt = this->currentCharFormat();
+    if (fmt.verticalAlignment() == QTextCharFormat::AlignSubScript) {
+        fmt.setVerticalAlignment(QTextCharFormat::AlignNormal);
+    } else {
+        fmt.setVerticalAlignment(QTextCharFormat::AlignSubScript);
+    }
+    this->setCurrentCharFormat(fmt);
+}
+
+void GuiTextEdit::toggleSegmentFormat() {
+    QTextCursor cursor = textCursor();
+    QTextBlockFormat format = cursor.blockFormat();
+    if (format.headingLevel() == 0 && format.alignment() == Qt::AlignLeading) {
+        if (format.textIndent() < 0.0) {
+            format.setTextIndent(0.0);
+            format.setLeftMargin(0.0);
+        } else {
+            format.setTextIndent(-m_format.tabWidth);
+            format.setLeftMargin(m_format.tabWidth);
+        }
+        cursor.setBlockFormat(format);
         emit currentBlockChanged(cursor.block());
     }
+}
+
+void GuiTextEdit::toggleFirstLineIndent() {
+    QTextCursor cursor = textCursor();
+    QTextBlockFormat format = cursor.blockFormat();
+    if (format.headingLevel() == 0 && format.alignment() == Qt::AlignLeading) {
+        if (format.textIndent() > 0.0) {
+            format.setTextIndent(0.0);
+            format.setLeftMargin(0.0);
+        } else {
+            format.setTextIndent(m_format.tabWidth);
+            format.setLeftMargin(0.0);
+        }
+        cursor.setBlockFormat(format);
+        emit currentBlockChanged(cursor.block());
+    }
+}
+
+void GuiTextEdit::increaseBlockIndent() {
+    QTextCursor cursor = textCursor();
+    QTextBlockFormat format = cursor.blockFormat();
+    if (format.headingLevel() == 0 && format.alignment() == Qt::AlignLeading) {
+        format.setIndent(std::min(format.indent() + 1, 9));
+        cursor.setBlockFormat(format);
+        emit currentBlockChanged(cursor.block());
+    }
+}
+
+void GuiTextEdit::decreaseBlockIndent() {
+    QTextCursor cursor = textCursor();
+    QTextBlockFormat format = cursor.blockFormat();
+    if (format.headingLevel() == 0 && format.alignment() == Qt::AlignLeading) {
+        format.setIndent(std::max(format.indent() - 1, 0));
+        cursor.setBlockFormat(format);
+        emit currentBlockChanged(cursor.block());
+    }
+}
+
+void GuiTextEdit::applyBlockAlignment(const Qt::Alignment align) {
+    this->setAlignment(align);
+    QTextCursor cursor = this->textCursor();
+    emit currentBlockChanged(cursor.block());
+}
+
+void GuiTextEdit::applyBlockFormat(BlockFormat format, int hLevel) {
+
+    QTextCursor cursor = textCursor();
+    int bPos = cursor.block().position();
+    int bLen = cursor.block().length();
+    int hLevelNow = cursor.blockFormat().headingLevel();
+
+    if (bLen < 2) return;
+    if (hLevel > 0 && hLevelNow == hLevel) return;
+
+    cursor.beginEditBlock();
+    cursor.setPosition(bPos, QTextCursor::MoveAnchor);
+    cursor.setPosition(bPos + bLen - 1, QTextCursor::KeepAnchor);
+    if (format == BlockFormat::Paragraph && hLevelNow != 0) {
+        cursor.setBlockFormat(m_format.blockParagraph);
+        cursor.setCharFormat(m_format.charParagraph);
+    } else if (format == BlockFormat::Header && hLevel == 1) {
+        cursor.setBlockFormat(m_format.blockHeader1);
+        cursor.setCharFormat(m_format.charHeader1);
+    } else if (format == BlockFormat::Header && hLevel == 2) {
+        cursor.setBlockFormat(m_format.blockHeader2);
+        cursor.setCharFormat(m_format.charHeader2);
+    } else if (format == BlockFormat::Header && hLevel == 3) {
+        cursor.setBlockFormat(m_format.blockHeader3);
+        cursor.setCharFormat(m_format.charHeader3);
+    } else if (format == BlockFormat::Header && hLevel == 4) {
+        cursor.setBlockFormat(m_format.blockHeader4);
+        cursor.setCharFormat(m_format.charHeader4);
+    }
+    cursor.endEditBlock();
+
+    emit currentBlockChanged(cursor.block());
 }
 
 /**

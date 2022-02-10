@@ -65,15 +65,57 @@ GuiDocEditor::GuiDocEditor(QWidget *parent)
     m_autoSave->setInterval(settings->editorAutoSave() * 1000);
 
     // Connections
-
-    connect(m_editToolBar, SIGNAL(documentAction(DocAction)),
-            m_textArea, SLOT(applyDocAction(DocAction)));
     connect(m_textArea, SIGNAL(currentCharFormatChanged(const QTextCharFormat&)),
             this, SLOT(editorCharFormatChanged(const QTextCharFormat&)));
     connect(m_textArea, SIGNAL(currentBlockChanged(const QTextBlock&)),
             this, SLOT(editorBlockChanged(const QTextBlock&)));
     connect(m_autoSave, SIGNAL(timeout()),
             this, SLOT(flushEditorData()));
+
+    // Editor Tool Bar Signals
+    connect(m_editToolBar->m_formatBold, SIGNAL(triggered()),
+            m_textArea, SLOT(toggleBoldFormat()));
+    connect(m_editToolBar->m_formatItalic, SIGNAL(triggered()),
+            m_textArea, SLOT(toggleItalicFormat()));
+    connect(m_editToolBar->m_formatUnderline, SIGNAL(triggered()),
+            m_textArea, SLOT(toggleUnderlineFormat()));
+    connect(m_editToolBar->m_formatStrikeOut, SIGNAL(triggered()),
+            m_textArea, SLOT(toggleStrikeOutFormat()));
+    connect(m_editToolBar->m_formatSuperScript, SIGNAL(triggered()),
+            m_textArea, SLOT(toggleSuperScriptFormat()));
+    connect(m_editToolBar->m_formatSubScript, SIGNAL(triggered()),
+            m_textArea, SLOT(toggleSubScriptFormat()));
+
+    connect(m_editToolBar->m_textSegment, SIGNAL(triggered()),
+            m_textArea, SLOT(toggleSegmentFormat()));
+    connect(m_editToolBar->m_textIndent, SIGNAL(triggered()),
+            m_textArea, SLOT(toggleFirstLineIndent()));
+    connect(m_editToolBar->m_blockIndent, SIGNAL(triggered()),
+            m_textArea, SLOT(increaseBlockIndent()));
+    connect(m_editToolBar->m_blockOutdent, SIGNAL(triggered()),
+            m_textArea, SLOT(decreaseBlockIndent()));
+
+    connect(m_editToolBar->m_formatHeader1, &QAction::triggered,
+            [this]{m_textArea->applyBlockFormat(GuiTextEdit::Header, 1);});
+    connect(m_editToolBar->m_formatHeader2, &QAction::triggered,
+            [this]{m_textArea->applyBlockFormat(GuiTextEdit::Header, 2);});
+    connect(m_editToolBar->m_formatHeader3, &QAction::triggered,
+            [this]{m_textArea->applyBlockFormat(GuiTextEdit::Header, 3);});
+    connect(m_editToolBar->m_formatHeader4, &QAction::triggered,
+            [this]{m_textArea->applyBlockFormat(GuiTextEdit::Header, 4);});
+    connect(m_editToolBar->m_formatParagraph, &QAction::triggered,
+            [this]{m_textArea->applyBlockFormat(GuiTextEdit::Paragraph, 0);});
+    connect(m_editToolBar->m_formatBlockQuote, &QAction::triggered,
+            [this]{m_textArea->applyBlockFormat(GuiTextEdit::BlockQuote, 0);});
+
+    connect(m_editToolBar->m_alignLeft, &QAction::triggered,
+            [this]{m_textArea->applyBlockAlignment(Qt::AlignLeft);});
+    connect(m_editToolBar->m_alignCentre, &QAction::triggered,
+            [this]{m_textArea->applyBlockAlignment(Qt::AlignHCenter);});
+    connect(m_editToolBar->m_alignRight, &QAction::triggered,
+            [this]{m_textArea->applyBlockAlignment(Qt::AlignRight);});
+    connect(m_editToolBar->m_alignJustify, &QAction::triggered,
+            [this]{m_textArea->applyBlockAlignment(Qt::AlignJustify);});
 }
 
 /**
@@ -107,6 +149,10 @@ bool GuiDocEditor::saveDocument() {
     if (!hasDocument()) {
         qWarning() << "No document to save";
         return false;
+    }
+    if (!m_textArea->isModified()) {
+        qDebug() << "Document has not been changed";
+        return true;
     }
 
     m_document->setLocked(true);
@@ -146,21 +192,53 @@ void GuiDocEditor::editorCharFormatChanged(const QTextCharFormat &fmt) {
     m_editToolBar->m_formatBold->setChecked(fmt.fontWeight() > QFont::Medium);
     m_editToolBar->m_formatItalic->setChecked(fmt.fontItalic());
     m_editToolBar->m_formatUnderline->setChecked(fmt.fontUnderline());
-    m_editToolBar->m_formatStrikethrough->setChecked(fmt.fontStrikeOut());
+    m_editToolBar->m_formatStrikeOut->setChecked(fmt.fontStrikeOut());
+    m_editToolBar->m_formatSuperScript->setChecked(fmt.verticalAlignment() == QTextCharFormat::AlignSuperScript);
+    m_editToolBar->m_formatSubScript->setChecked(fmt.verticalAlignment() == QTextCharFormat::AlignSubScript);
 }
 
 void GuiDocEditor::editorBlockChanged(const QTextBlock &block) {
+
     QTextBlockFormat blockFormat = block.blockFormat();
-    m_editToolBar->m_alignLeft->setChecked(blockFormat.alignment() == Qt::AlignLeft);
-    m_editToolBar->m_alignCentre->setChecked(blockFormat.alignment() == Qt::AlignHCenter);
-    m_editToolBar->m_alignRight->setChecked(blockFormat.alignment() == Qt::AlignRight);
-    m_editToolBar->m_alignJustify->setChecked(blockFormat.alignment() == Qt::AlignJustify);
+
+    switch (blockFormat.headingLevel()) {
+    case 1:
+        m_editToolBar->m_formatHeader1->setChecked(true);
+        break;
+    case 2:
+        m_editToolBar->m_formatHeader2->setChecked(true);
+        break;
+    case 3:
+        m_editToolBar->m_formatHeader3->setChecked(true);
+        break;
+    case 4:
+        m_editToolBar->m_formatHeader4->setChecked(true);
+        break;
+    default:
+        m_editToolBar->m_formatParagraph->setChecked(true);
+        break;
+    }
+
+    switch (blockFormat.alignment()) {
+    case  Qt::AlignLeft:
+        m_editToolBar->m_alignLeft->setChecked(true);
+        break;
+    case  Qt::AlignHCenter:
+        m_editToolBar->m_alignCentre->setChecked(true);
+        break;
+    case  Qt::AlignRight:
+        m_editToolBar->m_alignRight->setChecked(true);
+        break;
+    case  Qt::AlignJustify:
+        m_editToolBar->m_alignJustify->setChecked(true);
+        break;
+    }
+
+    m_editToolBar->m_textSegment->setChecked(blockFormat.textIndent() < 0.0);
     m_editToolBar->m_textIndent->setChecked(blockFormat.textIndent() > 0.0);
 }
 
 void GuiDocEditor::flushEditorData() {
-
-    qDebug() << "Ding!";
 
     if (!m_data->hasProject() || !hasDocument()) {
         return;
