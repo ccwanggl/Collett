@@ -73,6 +73,22 @@ GuiMain::GuiMain(QWidget *parent) : QMainWindow(parent) {
     connect(m_storyTree, SIGNAL(doubleClicked(const QModelIndex&)),
             this, SLOT(storyTreeDoubleClick(const QModelIndex&)));
 
+    connect(m_mainToolBar->m_openDocument, SIGNAL(triggered()),
+            this, SLOT(openSelectedDocument()));
+    connect(m_mainToolBar->m_saveDocument, SIGNAL(triggered()),
+            this, SLOT(saveOpenDocument()));
+    connect(m_mainToolBar->m_renameDocument, SIGNAL(triggered()),
+            this, SLOT(renameDocument()));
+
+    // Connect Actions to Capture Key Sequence
+    this->addAction(m_mainToolBar->m_newProject);
+    this->addAction(m_mainToolBar->m_openProject);
+    this->addAction(m_mainToolBar->m_saveProject);
+    this->addAction(m_mainToolBar->m_newDocument);
+    this->addAction(m_mainToolBar->m_openDocument);
+    this->addAction(m_mainToolBar->m_saveDocument);
+    this->addAction(m_mainToolBar->m_renameDocument);
+
     // Finalise
     setWindowTitle(
         tr("%1 %2 Version %3").arg(qApp->applicationName(), "–", qApp->applicationVersion())
@@ -194,6 +210,30 @@ void GuiMain::closeEvent(QCloseEvent *event) {
  * Private Slots
  * =============
  */
+
+void GuiMain::openSelectedDocument() {
+    if (!m_data->hasProject())
+        return;
+
+    QModelIndex index = m_storyTree->firstSelectedIndex();
+    if (!index.isValid())
+        return;
+
+    this->openDocument(m_data->project()->storyModel()->itemHandle(index));
+}
+
+void GuiMain::saveOpenDocument() {
+    if (!m_data->hasProject())
+        return;
+    if (m_docEditor->anyFocus())
+        m_docEditor->saveDocument();
+}
+
+void GuiMain::renameDocument() {
+    if (!m_data->hasProject())
+        return;
+    m_storyTree->doEditName(false);
+}
 
 void GuiMain::storyTreeDoubleClick(const QModelIndex &index) {
     if (!m_data->hasProject() || !index.isValid()) {

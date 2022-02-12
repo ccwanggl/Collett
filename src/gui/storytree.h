@@ -48,8 +48,14 @@ public:
 
     void setTreeModel(StoryModel *model);
 
-private slots:
+    // Class Getters
+
+    QModelIndex firstSelectedIndex();
+
+public slots:
     void doEditName(bool checked);
+
+private slots:
     void doOpenContextMenu(const QPoint &pos);
     void doAddChild(StoryItem *item, StoryItem::ItemType type, StoryModel::AddLocation loc);
 

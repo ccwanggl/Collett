@@ -22,12 +22,13 @@
 #include "maintoolbar.h"
 #include "icons.h"
 
-#include <QObject>
-#include <QToolBar>
-#include <QWidget>
-#include <QSizePolicy>
-#include <QAction>
 #include <QMenu>
+#include <QAction>
+#include <QObject>
+#include <QWidget>
+#include <QToolBar>
+#include <QSizePolicy>
+#include <QKeySequence>
 
 namespace Collett {
 
@@ -42,7 +43,7 @@ GuiMainToolBar::GuiMainToolBar(QWidget *parent)
     m_projectName = new QLabel(tr("No Project"));
 
     this->setOrientation(Qt::Horizontal);
-    this->buildProjectMenu();
+    this->buildMainMenu();
     this->addWidget(stretch1);
     this->addWidget(m_projectName);
     this->addWidget(stretch2);
@@ -58,29 +59,50 @@ void GuiMainToolBar::setProjectName(const QString &name) {
  * ===============
  */
 
-void GuiMainToolBar::buildProjectMenu() {
+void GuiMainToolBar::buildMainMenu() {
 
     CollettIcons *icons = CollettIcons::instance();
 
-    // Menu
+    // Project Menu
     m_projectMenu = new QMenu(this);
 
-    // New Project
     m_newProject = m_projectMenu->addAction(tr("New Project"));
+    m_newProject->setShortcut(QKeySequence("Ctrl+Shift+N"));
 
-    // Open Project
     m_openProject = m_projectMenu->addAction(tr("Open Project"));
+    m_openProject->setShortcut(QKeySequence("Ctrl+Shift+O"));
 
-    // Save Project
     m_saveProject = m_projectMenu->addAction(tr("Save Project"));
+    m_saveProject->setShortcut(QKeySequence("Ctrl+Shift+S"));
 
-    // Assemble
     m_projectButton = new QToolButton(this);
     m_projectButton->setText(tr("Project"));
     m_projectButton->setIcon(icons->icon("archive"));
     m_projectButton->setMenu(m_projectMenu);
     m_projectButton->setPopupMode(QToolButton::InstantPopup);
     this->addWidget(m_projectButton);
+
+    // Documents Menu
+    m_docsMenu = new QMenu(this);
+
+    m_newDocument = m_docsMenu->addAction(tr("New Document"));
+    m_newDocument->setShortcut(QKeySequence("Ctrl+N"));
+
+    m_openDocument = m_docsMenu->addAction(tr("Open Document"));
+    m_openDocument->setShortcut(QKeySequence("Ctrl+O"));
+
+    m_saveDocument = m_docsMenu->addAction(tr("Save Document"));
+    m_saveDocument->setShortcut(QKeySequence("Ctrl+S"));
+
+    m_renameDocument = m_docsMenu->addAction(tr("Rename Document"));
+    m_renameDocument->setShortcut(QKeySequence("F2"));
+
+    m_docsButton = new QToolButton(this);
+    m_docsButton->setText(tr("Documents"));
+    m_docsButton->setIcon(icons->icon("documents"));
+    m_docsButton->setMenu(m_docsMenu);
+    m_docsButton->setPopupMode(QToolButton::InstantPopup);
+    this->addWidget(m_docsButton);
 
 }
 

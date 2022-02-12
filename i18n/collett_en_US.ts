@@ -112,7 +112,7 @@
 <context>
     <name>Collett::GuiMain</name>
     <message>
-        <location filename="../src/guimain.cpp" line="78"/>
+        <location filename="../src/guimain.cpp" line="94"/>
         <source>%1 %2 Version %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -120,7 +120,7 @@
 <context>
     <name>Collett::GuiMainToolBar</name>
     <message>
-        <location filename="../src/gui/maintoolbar.cpp" line="42"/>
+        <location filename="../src/gui/maintoolbar.cpp" line="43"/>
         <source>No Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -145,7 +145,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/maintoolbar.cpp" line="96"/>
+        <location filename="../src/gui/maintoolbar.cpp" line="88"/>
+        <source>New Document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/maintoolbar.cpp" line="91"/>
+        <source>Open Document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/maintoolbar.cpp" line="94"/>
+        <source>Save Document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/maintoolbar.cpp" line="97"/>
+        <source>Rename Document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/maintoolbar.cpp" line="101"/>
+        <source>Documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/maintoolbar.cpp" line="118"/>
         <source>Menu</source>
         <translation type="unfinished"></translation>
     </message>
@@ -153,75 +178,70 @@
 <context>
     <name>Collett::GuiStoryTree</name>
     <message>
-        <location filename="../src/gui/storytree.cpp" line="58"/>
-        <source>Rename</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/gui/storytree.cpp" line="119"/>
+        <location filename="../src/gui/storytree.cpp" line="134"/>
         <source>Add Scene</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/storytree.cpp" line="121"/>
         <location filename="../src/gui/storytree.cpp" line="136"/>
         <location filename="../src/gui/storytree.cpp" line="151"/>
         <location filename="../src/gui/storytree.cpp" line="166"/>
         <location filename="../src/gui/storytree.cpp" line="181"/>
+        <location filename="../src/gui/storytree.cpp" line="196"/>
         <source>Inside</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/storytree.cpp" line="125"/>
         <location filename="../src/gui/storytree.cpp" line="140"/>
         <location filename="../src/gui/storytree.cpp" line="155"/>
         <location filename="../src/gui/storytree.cpp" line="170"/>
         <location filename="../src/gui/storytree.cpp" line="185"/>
+        <location filename="../src/gui/storytree.cpp" line="200"/>
         <source>Before</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/storytree.cpp" line="127"/>
         <location filename="../src/gui/storytree.cpp" line="142"/>
         <location filename="../src/gui/storytree.cpp" line="157"/>
         <location filename="../src/gui/storytree.cpp" line="172"/>
         <location filename="../src/gui/storytree.cpp" line="187"/>
+        <location filename="../src/gui/storytree.cpp" line="202"/>
         <source>After</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/storytree.cpp" line="134"/>
+        <location filename="../src/gui/storytree.cpp" line="149"/>
         <source>Add Chapter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/storytree.cpp" line="149"/>
+        <location filename="../src/gui/storytree.cpp" line="164"/>
         <source>Add Partition</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/storytree.cpp" line="164"/>
+        <location filename="../src/gui/storytree.cpp" line="179"/>
         <source>Add Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/storytree.cpp" line="166"/>
+        <location filename="../src/gui/storytree.cpp" line="181"/>
         <source>Here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/storytree.cpp" line="179"/>
+        <location filename="../src/gui/storytree.cpp" line="194"/>
         <source>Add Page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/storytree.cpp" line="216"/>
+        <location filename="../src/gui/storytree.cpp" line="231"/>
         <source>Rename Story Item</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/storytree.cpp" line="216"/>
-        <source>New name:</source>
+        <location filename="../src/gui/storytree.cpp" line="231"/>
+        <source>New Name:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
