@@ -1,6 +1,6 @@
 /*
-** Collett – Project Story Item Class
-** ==================================
+** Collett – Project Item Class
+** ============================
 ** 
 ** This file is a part of Collett
 ** Copyright 2020–2022, Veronica Berglyd Olsen
@@ -19,8 +19,8 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef COLLETT_STORYITEM_H
-#define COLLETT_STORYITEM_H
+#ifndef COLLETT_ITEM_H
+#define COLLETT_ITEM_H
 
 #include <QUuid>
 #include <QVector>
@@ -29,22 +29,21 @@
 
 namespace Collett {
 
-class StoryItem : public QObject
+class Item : public QObject
 {
     Q_OBJECT
 
 public:
-    enum ItemType{Invalid, Root, Book, Partition, Chapter, Scene, Page};
+    enum ItemType{Invalid, Root, Folder, Book, Partition, Chapter, Scene, Page, Note};
 
-    explicit StoryItem(const QUuid &uuid, const QString &name, ItemType type, StoryItem *parentItem=nullptr);
-    ~StoryItem();
+    explicit Item(const QUuid &uuid, const QString &name, bool story, ItemType type, Item *parentItem=nullptr);
+    ~Item();
 
     // Class Methods
 
-    StoryItem *addChild(const QString &name, ItemType type, int pos=-1);
-    StoryItem *addChild(const QJsonObject &json);
+    Item *addChild(const QString &name, ItemType type, int pos=-1);
+    Item *addChild(const QJsonObject &json);
     QJsonObject toJsonObject();
-    static StoryItem* fromJsonObject(const QJsonObject &json, StoryItem *parentItem=nullptr);
     bool allowedChild(ItemType type) const;
     bool allowedSibling(ItemType type) const;
 
@@ -65,7 +64,7 @@ public:
 
     // Static Methods
 
-    static QString typeToString(ItemType type);
+    static QString typeToLabel(ItemType type);
     static ItemType typeFromString(const QString &value);
 
     // Model Access
@@ -73,22 +72,23 @@ public:
     int row() const;
     int childCount() const;
     QVariant data() const;
-    StoryItem *child(int row);
-    StoryItem *parentItem();
+    Item *child(int row);
+    Item *parentItem();
 
 private:
-    QVector<StoryItem*> m_childItems;
-    StoryItem          *m_parentItem;
+    QVector<Item*> m_childItems;
+    Item          *m_parentItem;
 
     // Member Values
 
-    QUuid    m_handle;
-    QString  m_name;
-    ItemType m_type;
-    int      m_words;
-    bool     m_expanded;
+    bool      m_story;
+    QUuid     m_handle;
+    QString   m_name;
+    ItemType  m_type;
+    int       m_words;
+    bool      m_expanded;
 
 };
 } // namespace Collett
 
-#endif // COLLETT_STORYITEM_H
+#endif // COLLETT_ITEM_H

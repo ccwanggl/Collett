@@ -1,4 +1,7 @@
 {
+	"c:model": "STORY",
+	"u:icon": "storyModel",
+	"u:name": "Story",
 	"u:type": "ROOT",
 	"x:items": [
 		{

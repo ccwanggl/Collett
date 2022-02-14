@@ -1,6 +1,6 @@
 /*
-** Collett – Project Story Model Class
-** ===================================
+** Collett – Project Item Model Class
+** ==================================
 **
 ** This file is a part of Collett
 ** Copyright 2020–2022, Veronica Berglyd Olsen
@@ -19,10 +19,10 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef COLLETT_STORYMODEL_H
-#define COLLETT_STORYMODEL_H
+#ifndef COLLETT_ITEMMODEL_H
+#define COLLETT_ITEMMODEL_H
 
-#include "storyitem.h"
+#include "item.h"
 
 #include <QObject>
 #include <QString>
@@ -33,33 +33,48 @@
 
 namespace Collett {
 
-class StoryModel : public QAbstractItemModel
+class ItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
+    enum ModelType{Invalid, Story, Plot, Characters, Locations};
     enum AddLocation{Before, After, Inside};
 
-    explicit StoryModel(QObject *parent=nullptr);
-    ~StoryModel();
+    explicit ItemModel(QObject *parent=nullptr);
+    explicit ItemModel(ModelType type, QString name, QObject *parent=nullptr);
+    ~ItemModel();
 
     // Class Methods
 
     QJsonObject toJsonObject();
     bool fromJsonObject(const QJsonObject &json);
-    bool addItem(StoryItem *relativeTo, StoryItem::ItemType type, AddLocation loc);
-    bool isEmpty();
+    bool addItem(Item *relativeTo, Item::ItemType type, AddLocation loc);
+    bool isEmpty() const;
+    bool isValid() const;
 
     // Class Getters
 
-    StoryItem *rootItem() const;
-    StoryItem *storyItem(const QModelIndex &index);
+    QString modelName() const;
+    QString modelIcon() const;
+
+    Item *rootItem() const;
+    Item *storyItem(const QModelIndex &index);
     QUuid itemHandle(const QModelIndex &index);
     QString itemName(const QModelIndex &index);
     bool isExpanded(const QModelIndex &index);
 
+    // Static Methods
+
+    static QString modelTypeToLabel(ModelType type);
+    static QString modelTypeToIcon(ModelType type);
+    static QString modelTypeToString(ModelType type);
+    static ModelType modelTypeFromString(const QString &value);
+
     // Model Edit
 
+    void setModelName(const QString &name);
+    void setModelIcon(const QString &icon);
     void setItemName(const QModelIndex &index, const QString &name);
     void setExpanded(const QModelIndex &index, bool state);
 
@@ -74,9 +89,14 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
 private:
-    StoryItem *m_rootItem = nullptr;
+    ModelType m_type;
+    QString   m_name;
+    QString   m_icon;
+    Item     *m_rootItem = nullptr;
+
+    QString m_lastError = "";
 
 };
 } // namespace Collett
 
-#endif // COLLETT_STORYMODEL_H
+#endif // COLLETT_ITEMMODEL_H

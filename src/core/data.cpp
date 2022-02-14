@@ -21,7 +21,7 @@
 
 #include "data.h"
 #include "project.h"
-#include "storymodel.h"
+#include "itemmodel.h"
 
 #include <QString>
 #include <QWidget>
@@ -101,9 +101,9 @@ Project *CollettData::project() {
     }
 }
 
-StoryModel *CollettData::storyModel() {
+ItemModel *CollettData::storyModel() {
     if (hasProject()) {
-        return m_project.data()->storyModel();
+        return m_project.data()->model("story");
     } else {
         return nullptr;
     }

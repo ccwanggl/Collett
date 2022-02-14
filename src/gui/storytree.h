@@ -22,8 +22,8 @@
 #ifndef GUI_STORYTREE_H
 #define GUI_STORYTREE_H
 
-#include "storyitem.h"
-#include "storymodel.h"
+#include "item.h"
+#include "itemmodel.h"
 
 #include <QPoint>
 #include <QAction>
@@ -46,7 +46,7 @@ public:
 
     // Class Setters
 
-    void setTreeModel(StoryModel *model);
+    void setTreeModel(ItemModel *model);
 
     // Class Getters
 
@@ -58,12 +58,12 @@ public slots:
 
 private slots:
     void doOpenContextMenu(const QPoint &pos);
-    void doAddChild(StoryItem *item, StoryItem::ItemType type, StoryModel::AddLocation loc);
+    void doAddChild(Item *item, Item::ItemType type, ItemModel::AddLocation loc);
     void saveExpanded(const QModelIndex &index);
     void saveCollapsed(const QModelIndex &index);
 
 private:
-    StoryModel *m_model = nullptr;
+    ItemModel *m_model = nullptr;
 
     QAction *m_editItem;
 

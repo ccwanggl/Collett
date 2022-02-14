@@ -25,7 +25,7 @@
 #include "collett.h"
 #include "storage.h"
 #include "document.h"
-#include "storymodel.h"
+#include "itemmodel.h"
 
 #include <QDir>
 #include <QHash>
@@ -47,7 +47,7 @@ public:
 
     bool openProject();
     bool saveProject();
-    bool isValid() const;
+    ItemModel *newModel(ItemModel::ModelType type, const QString &name);
 
     // Class Setters
 
@@ -56,12 +56,13 @@ public:
 
     // Class Getters
 
+    bool isValid() const;
     QUuid lastDocumentMain() const;
 
     QString projectName() const;
-    StoryModel *storyModel();
     Storage *store();
 
+    ItemModel *model(const QString &name);
     Document *document(const QUuid &uuid);
 
     // Error Handling
@@ -90,19 +91,13 @@ private:
 
     // Content
 
-    StoryModel *m_storyModel;
-    QHash<QUuid, Document*> m_documents;
+    QHash<QString, ItemModel*> m_models;
+    QHash<QUuid, Document*>    m_documents;
 
     // File Load & Save
 
-    bool loadSettingsFile();
-    bool saveSettingsFile();
-
-    bool loadStoryFile();
-    bool saveStoryFile();
-
-    void loadDocuments();
-    void saveDocuments();
+    bool loadProjectStructure();
+    bool saveProjectStructure();
 
 };
 } // namespace Collett
