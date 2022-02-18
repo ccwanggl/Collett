@@ -193,10 +193,6 @@ QJsonObject Item::toJsonObject() {
             type = QLatin1String("ROOT");
             expandable = false;
             break;
-        case Item::Folder:
-            type = QLatin1String("FOLDER");
-            expandable = true;
-            break;
         case Item::Book:
             type = QLatin1String("BOOK");
             expandable = true;
@@ -216,6 +212,10 @@ QJsonObject Item::toJsonObject() {
         case Item::Page:
             type = QLatin1String("PAGE");
             expandable = false;
+            break;
+        case Item::Group:
+            type = QLatin1String("GROUP");
+            expandable = true;
             break;
         case Item::Note:
             type = QLatin1String("NOTE");
@@ -278,9 +278,9 @@ bool Item::allowedChild(Item::ItemType type) const {
     } else {
         switch (m_type) {
             case Item::Root:
-                return type == Item::Folder || type == Item::Note;
+                return type == Item::Group || type == Item::Note;
                 break;
-            case Item::Folder:
+            case Item::Group:
                 return type == Item::Note;
                 break;
             default:
@@ -303,6 +303,16 @@ bool Item::allowedSibling(Item::ItemType type) const {
         return m_parentItem->allowedChild(type);
     } else {
         return false;
+    }
+}
+
+bool Item::canHoldDocument() const {
+    switch (m_type) {
+        case ItemType::Chapter: return true;
+        case ItemType::Scene:   return true;
+        case ItemType::Page:    return true;
+        case ItemType::Note:    return true;
+        default: return false;
     }
 }
 
@@ -357,6 +367,18 @@ bool Item::isExpanded() const {
     return m_expanded;
 }
 
+Item *Item::findItemFromHandle(const QUuid &uuid) const {
+    if (m_handle == uuid) {
+        return const_cast<Item*>(this);
+    } else {
+        for (Item* child : m_childItems) {
+            Item *item = child->findItemFromHandle(uuid);
+            if (item) return item;
+        }
+    }
+    return nullptr;
+}
+
 /**
  * Static Methods
  * ==============
@@ -375,12 +397,12 @@ QString Item::typeToLabel(ItemType type) {
     QString name = "";
     switch (type) {
         case Item::Root:      name = ""; break;
-        case Item::Folder:    name = tr("Folder"); break;
         case Item::Book:      name = tr("Book"); break;
         case Item::Partition: name = tr("Partition"); break;
         case Item::Chapter:   name = tr("Chapter"); break;
         case Item::Scene:     name = tr("Scene"); break;
         case Item::Page:      name = tr("Page"); break;
+        case Item::Group:     name = tr("Group"); break;
         case Item::Note:      name = tr("Note"); break;
         case Item::Invalid:   name = ""; break;
     }
@@ -391,8 +413,6 @@ Item::ItemType Item::typeFromString(const QString &value) {
     QString upper = value.toUpper();
     if (upper == "ROOT") {
         return Item::Root;
-    } else if (upper == "FOLDER") {
-        return Item::Folder;
     } else if (upper == "BOOK") {
         return Item::Book;
     } else if (upper == "PARTITION") {
@@ -403,6 +423,8 @@ Item::ItemType Item::typeFromString(const QString &value) {
         return Item::Scene;
     } else if (upper == "PAGE") {
         return Item::Page;
+    } else if (upper == "GROUP") {
+        return Item::Group;
     } else if (upper == "NOTE") {
         return Item::Note;
     } else {
