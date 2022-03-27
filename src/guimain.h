@@ -3,7 +3,7 @@
 ** ========================
 **
 ** This file is a part of Collett
-** Copyright 2020–2022, Veronica Berglyd Olsen
+** Copyright 2021–2022, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -23,23 +23,17 @@
 #define GUI_MAIN_H
 
 #include "data.h"
-#include "item.h"
 #include "collett.h"
-#include "itemtree.h"
-#include "doceditor.h"
+#include "workarea.h"
 #include "statusbar.h"
-#include "maintoolbar.h"
 #include "treetoolbar.h"
 
-#include <QHash>
-#include <QUuid>
 #include <QObject>
 #include <QString>
 #include <QWidget>
 #include <QSplitter>
+#include <QCloseEvent>
 #include <QMainWindow>
-#include <QModelIndex>
-#include <QStackedWidget>
 
 namespace Collett {
 
@@ -51,49 +45,30 @@ public:
     GuiMain(QWidget *parent=nullptr);
     ~GuiMain();
 
-    // Project Methods
+    // Collection Methods
 
-    void openProject(const QString &path);
-    bool saveProject();
-    bool closeProject();
-
-    // Document Methods
-
-    void openDocument(Item *item);
-    void saveDocument();
-    void closeDocument();
+    void openCollection(const QString &path);
+    void saveCollection();
+    void closeCollection();
 
     // GUI Methods
 
-    void addItemTree(const QString &name);
     bool closeMain();
 
 private:
     CollettData *m_data;
 
     // Collett Widgets
-    GuiMainToolBar *m_mainToolBar;
     GuiTreeToolBar *m_treeToolBar;
-    QStackedWidget *m_treeStack;
-    GuiDocEditor   *m_docEditor;
+    GuiWorkArea    *m_workArea;
     GuiMainStatus  *m_mainStatus;
-
-    QHash<QString, GuiItemTree*> m_itemTrees;
-
-    // GUI Widgets
-    QSplitter *m_splitMain;
 
     // Events
     void closeEvent(QCloseEvent*);
 
 private slots:
 
-    void closeProjectRequest();
-    void openSelectedDocument();
-    void saveCurrentDocument();
-    void renameDocument();
-    void itemTreeDoubleClick(const QModelIndex &index);
-    void changeModelTree(GuiItemTree *tree);
+    void closeCollectionRequest();
 
 };
 } // namespace Collett

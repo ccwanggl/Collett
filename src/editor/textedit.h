@@ -3,7 +3,7 @@
 ** ===============================
 **
 ** This file is a part of Collett
-** Copyright 2020–2022, Veronica Berglyd Olsen
+** Copyright 2021–2022, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -22,9 +22,9 @@
 #ifndef GUI_TEXTEDIT_H
 #define GUI_TEXTEDIT_H
 
+#include "data.h"
 #include "collett.h"
 #include "settings.h"
-#include "data.h"
 
 #include <QObject>
 #include <QWidget>

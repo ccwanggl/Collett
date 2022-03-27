@@ -1,6 +1,6 @@
 /*
-** Collett – Core Data Class
-** =========================
+** Collett – GUI Collection Widget Class
+** =====================================
 **
 ** This file is a part of Collett
 ** Copyright 2021–2022, Veronica Berglyd Olsen
@@ -19,46 +19,28 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef COLLETT_DATA_H
-#define COLLETT_DATA_H
+#include "collectionwidget.h"
 
-#include "collett.h"
-#include "collection.h"
-
-#include <QObject>
-#include <QString>
-#include <QWidget>
-#include <QVariant>
-#include <QScopedPointer>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGridLayout>
 
 namespace Collett {
 
-class CollettData : public QObject
-{
-    Q_OBJECT
+GuiCollectionWidget::GuiCollectionWidget(QWidget *parent) : QWidget(parent) {
 
-public:
-    static CollettData *instance();
-    ~CollettData();
-    CollettData();
+    QGridLayout *outerBox = new QGridLayout();
 
-    // Class Methods
+    m_collectionName = new QLabel("Collection");
 
-    void newCollection();
-    void openCollection(const QString &path);
-    void saveCollection();
-    void closeCollection();
+    // Assemble
+    outerBox->addWidget(m_collectionName, 1, 1);
+    outerBox->setColumnStretch(0, 1);
+    outerBox->setColumnStretch(2, 1);
+    outerBox->setRowStretch(0, 1);
+    outerBox->setRowStretch(2, 1);
 
-    // Class Getters
+    this->setLayout(outerBox);
+}
 
-    bool hasCollection() const;
-    Collection *collection();
-
-private:
-    static CollettData *staticInstance;
-    QScopedPointer<Collection> m_collection;
-
-};
 } // namespace Collett
-
-#endif // COLLETT_DATA_H

@@ -3,7 +3,7 @@
 ** =======================
 **
 ** This file is a part of Collett
-** Copyright 2020–2022, Veronica Berglyd Olsen
+** Copyright 2021–2022, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
 
     QCommandLineOption openFlag(
         QStringList() << "o" << "open",
-        QCoreApplication::translate("main", "Open the <path> project on launch."),
+        QCoreApplication::translate("main", "Open the <path> collection on launch."),
         QCoreApplication::translate("main", "path")
     );
     parser.addOption(openFlag);
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
     Collett::GuiMain mainGUI;
     mainGUI.show();
     if (parser.isSet(openFlag)) {
-        mainGUI.openProject(parser.value(openFlag));
+        mainGUI.openCollection(parser.value(openFlag));
     }
 
     return app.exec();

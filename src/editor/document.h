@@ -3,7 +3,7 @@
 ** ========================
 **
 ** This file is a part of Collett
-** Copyright 2020–2022, Veronica Berglyd Olsen
+** Copyright 2021–2022, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -23,9 +23,7 @@
 #define COLLETT_DOCUMENT_H
 
 #include "collett.h"
-#include "storage.h"
 
-#include <QUuid>
 #include <QObject>
 #include <QJsonArray>
 
@@ -36,7 +34,7 @@ class Document : public QObject
     Q_OBJECT
 
 public:
-    explicit Document(Storage *store, const QUuid uuid);
+    explicit Document(const QString &path);
     ~Document() {};
 
     // Setters
@@ -47,7 +45,6 @@ public:
     // Getters
 
     QJsonArray content() const;
-    QUuid handle() const;
 
     // Check State
 
@@ -60,8 +57,7 @@ public:
     bool write();
 
 private:
-    Storage *m_store;
-    QUuid    m_handle;
+    QString m_path;
 
     bool m_locked;
     bool m_unsaved;

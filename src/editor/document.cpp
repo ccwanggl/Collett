@@ -3,7 +3,7 @@
 ** ========================
 **
 ** This file is a part of Collett
-** Copyright 2020–2022, Veronica Berglyd Olsen
+** Copyright 2021–2022, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -20,18 +20,17 @@
 */
 
 #include "collett.h"
+#include "collection.h"
 #include "document.h"
 
-#include <QUuid>
 #include <QDateTime>
 #include <QJsonArray>
 #include <QJsonObject>
 
 namespace Collett {
 
-Document::Document(Storage *store, const QUuid uuid)
-    : m_store(store), m_handle(uuid)
-{
+Document::Document(const QString &path) : m_path(path) {
+
     m_locked = false;
     m_unsaved = true;
     m_created = QDateTime::currentDateTime().toString(Qt::ISODate);
@@ -59,10 +58,6 @@ void Document::setLocked(bool locked) {
 
 QJsonArray Document::content() const {
     return m_content;
-}
-
-QUuid Document::handle() const {
-    return m_handle;
 }
 
 /**
@@ -93,7 +88,7 @@ bool Document::read() {
 
     QJsonObject json;
 
-    if (!m_store->loadFile(m_handle, json)) {
+    if (!Collection::jsonDocumentReader(m_path, json)) {
         return false;
     }
 
@@ -142,7 +137,7 @@ bool Document::write() {
     json.insert(QLatin1String("m:updated"), m_updated);
     json.insert(QLatin1String("x:content"), m_content);
 
-    if (!m_store->saveFile(m_handle, json)) {
+    if (!Collection::jsonDocumentWriter(m_path, json, false)) {
         return false;
     }
 

@@ -3,7 +3,7 @@
 ** ================================
 **
 ** This file is a part of Collett
-** Copyright 2020–2022, Veronica Berglyd Olsen
+** Copyright 2021–2022, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -22,15 +22,10 @@
 #ifndef GUI_TREETOOLBAR_H
 #define GUI_TREETOOLBAR_H
 
-#include "itemtree.h"
-#include "itemmodel.h"
-
-#include <QHash>
 #include <QAction>
 #include <QObject>
-#include <QString>
+#include <QWidget>
 #include <QToolBar>
-#include <QToolButton>
 
 namespace Collett {
 
@@ -42,23 +37,10 @@ public:
     GuiTreeToolBar(QWidget *parent=nullptr);
     ~GuiTreeToolBar() {};
 
-    // Class Methods
-
-    void clearModels();
-    void addModelEntry(const QString &name, ItemModel *model, GuiItemTree *tree);
-
-signals:
-    void treeButtonClicked(GuiItemTree *tree);
-
 private:
-    QAction *m_addAction;
-    QHash<QString, QToolButton*>  m_modelButtons;
-    QHash<QString, GuiItemTree*> m_modelTree;
-
-    void initToolBar();
-
-private slots:
-    void treeButtonTriggered(const QString &name);
+    QAction *m_collectionAction;
+    QAction *m_exploreAction;
+    QAction *m_settingsAction;
 
 };
 } // namespace Collett

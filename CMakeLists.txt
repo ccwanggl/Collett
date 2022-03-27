@@ -3,7 +3,7 @@
 # ==========================
 #
 # This file is a part of Collett
-# Copyright 2020–2021, Veronica Berglyd Olsen
+# Copyright 2021–2021, Veronica Berglyd Olsen
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -82,22 +82,18 @@ include_directories(
 
 # Source Files
 list(APPEND SRC_FILES
+    src/core/collection
     src/core/data
     src/core/icons
-    src/core/storage
     src/core/svgiconengine
     src/editor/doceditor
+    src/editor/document
     src/editor/edittoolbar
     src/editor/textedit
-    src/gui/itemtree
-    src/gui/itemtreedelegate
-    src/gui/maintoolbar
+    src/gui/collectionwidget
     src/gui/statusbar
     src/gui/treetoolbar
-    src/project/document
-    src/project/item
-    src/project/itemmodel
-    src/project/project
+    src/gui/workarea
     src/guimain
     src/main
     src/settings

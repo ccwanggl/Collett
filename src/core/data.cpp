@@ -3,7 +3,7 @@
 ** =========================
 **
 ** This file is a part of Collett
-** Copyright 2020–2022, Veronica Berglyd Olsen
+** Copyright 2021–2022, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 */
 
 #include "data.h"
-#include "project.h"
-#include "itemmodel.h"
+#include "collection.h"
 
 #include <QString>
 #include <QWidget>
@@ -46,7 +45,7 @@ CollettData *CollettData::instance() {
 CollettData::CollettData() {}
 CollettData::~CollettData() {
     qDebug() << "Destructor: CollettData";
-    m_project.reset();
+    m_collection.reset();
 }
 
 /**
@@ -54,30 +53,29 @@ CollettData::~CollettData() {
  * =============
  */
 
-bool CollettData::openProject(const QString &path) {
-
-    m_project.reset(new Project(path));
-    if (!m_project.data()->hasError()) {
-        m_project.data()->openProject();
-    }
-    if (!m_project.data()->isValid()) {
-        m_project.reset(nullptr);
-        return false;
-    }
-
-    return true;
-}
-
-bool CollettData::saveProject() {
-    if (hasProject()) {
-        return m_project.data()->saveProject();
-    } else {
-        return false;
+void CollettData::newCollection() {
+    if (!hasCollection()) {
+        m_collection.reset(new Collection());
     }
 }
 
-void CollettData::closeProject() {
-    m_project.reset(nullptr);
+void CollettData::openCollection(const QString &path) {
+
+    m_collection.reset(new Collection());
+    m_collection.data()->openCollection(path);
+    if (m_collection.data()->hasError()) {
+        m_collection.reset(nullptr);
+    }
+}
+
+void CollettData::saveCollection() {
+    if (hasCollection()) {
+        return m_collection.data()->saveCollection();
+    }
+}
+
+void CollettData::closeCollection() {
+    m_collection.reset(nullptr);
 }
 
 /**
@@ -85,17 +83,13 @@ void CollettData::closeProject() {
  * =============
  */
 
-bool CollettData::hasProject() const {
-    if (m_project.isNull()) {
-        return false;
-    } else {
-        return m_project.data()->isValid();
-    }
+bool CollettData::hasCollection() const {
+    return !m_collection.isNull();
 }
 
-Project *CollettData::project() {
-    if (hasProject()) {
-        return m_project.data();
+Collection *CollettData::collection() {
+    if (hasCollection()) {
+        return m_collection.data();
     } else {
         return nullptr;
     }

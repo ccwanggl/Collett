@@ -3,7 +3,7 @@
 ** =============================
 **
 ** This file is a part of Collett
-** Copyright 2020–2022, Veronica Berglyd Olsen
+** Copyright 2021–2022, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -74,14 +74,14 @@ CollettSettings *CollettSettings::staticInstance = nullptr;
 CollettSettings *CollettSettings::instance() {
     if (staticInstance == nullptr) {
         staticInstance = new CollettSettings();
-        qDebug() << "Constructor: CollettSettings";
+        qDebug() << "Constructor: CollettSettings (Static)";
     }
     return staticInstance;
 }
 
 void CollettSettings::destroy() {
     if (staticInstance != nullptr) {
-        qDebug() << "Destructor: Static CollettSettings";
+        qDebug() << "Destructor: CollettSettings (Static)";
         delete CollettSettings::staticInstance;
     }
 }

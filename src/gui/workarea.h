@@ -1,6 +1,6 @@
 /*
-** Collett – Core Data Class
-** =========================
+** Collett – GUI Work Area Class
+** =============================
 **
 ** This file is a part of Collett
 ** Copyright 2021–2022, Veronica Berglyd Olsen
@@ -19,46 +19,31 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef COLLETT_DATA_H
-#define COLLETT_DATA_H
+#ifndef GUI_WORKAREA_H
+#define GUI_WORKAREA_H
 
-#include "collett.h"
-#include "collection.h"
+#include "collectionwidget.h"
 
 #include <QObject>
 #include <QString>
-#include <QWidget>
-#include <QVariant>
-#include <QScopedPointer>
+#include <QTabWidget>
 
 namespace Collett {
 
-class CollettData : public QObject
+class GuiWorkArea : public QTabWidget
 {
     Q_OBJECT
 
 public:
-    static CollettData *instance();
-    ~CollettData();
-    CollettData();
+    GuiWorkArea(QWidget *parent=nullptr);
+    ~GuiWorkArea() {};
 
-    // Class Methods
-
-    void newCollection();
-    void openCollection(const QString &path);
-    void saveCollection();
-    void closeCollection();
-
-    // Class Getters
-
-    bool hasCollection() const;
-    Collection *collection();
+    void openDocument(const QString &path);
 
 private:
-    static CollettData *staticInstance;
-    QScopedPointer<Collection> m_collection;
+    GuiCollectionWidget *m_collectionWidget;
 
 };
 } // namespace Collett
 
-#endif // COLLETT_DATA_H
+#endif // GUI_WORKAREA_H

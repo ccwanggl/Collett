@@ -1,6 +1,6 @@
 /*
-** Collett – Core Data Class
-** =========================
+** Collett – Collection Class
+** ==========================
 **
 ** This file is a part of Collett
 ** Copyright 2021–2022, Veronica Berglyd Olsen
@@ -19,46 +19,68 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef COLLETT_DATA_H
-#define COLLETT_DATA_H
+#ifndef COLLETT_COLLECTION_H
+#define COLLETT_COLLECTION_H
 
 #include "collett.h"
-#include "collection.h"
 
 #include <QObject>
+#include <QVector>
 #include <QString>
-#include <QWidget>
-#include <QVariant>
-#include <QScopedPointer>
+#include <QJsonObject>
 
 namespace Collett {
 
-class CollettData : public QObject
+class Collection : public QObject
 {
     Q_OBJECT
 
 public:
-    static CollettData *instance();
-    ~CollettData();
-    CollettData();
+    struct Content {
+        QString path = "";
+    };
+
+    explicit Collection();
+    ~Collection();
 
     // Class Methods
 
-    void newCollection();
     void openCollection(const QString &path);
     void saveCollection();
-    void closeCollection();
+
+    static bool jsonDocumentReader(const QString &filePath, QJsonObject &fileData);
+    static bool jsonDocumentWriter(const QString &filePath, const QJsonObject &fileData, bool compact);
+
+    // Class Setters
+
+    void setCollectionName(const QString &name);
 
     // Class Getters
 
-    bool hasCollection() const;
-    Collection *collection();
+    QString collectionName() const;
+    QString relativePath(const QString &path) const;
+    bool hasError() const;
+    QString lastError() const;
 
 private:
-    static CollettData *staticInstance;
-    QScopedPointer<Collection> m_collection;
+    QString m_path;
+    QString m_lastError;
+    bool    m_changed;
 
+    // Meta Data
+
+    QString m_created;
+    QString m_updated;
+
+    // Content
+
+    QString m_name;
+    QVector<Content> m_content;
+
+    // Functions
+
+    void setChanged(bool state);
 };
 } // namespace Collett
 
-#endif // COLLETT_DATA_H
+#endif // COLLETT_COLLECTION_H
