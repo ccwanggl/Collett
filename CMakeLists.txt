@@ -3,7 +3,7 @@
 # ==========================
 #
 # This file is a part of Collett
-# Copyright 2020–2021, Veronica Berglyd Olsen
+# Copyright 2020–2023, Veronica Berglyd Olsen
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -48,7 +48,8 @@ set(CMAKE_CXX_FLAGS_DEBUG   "-Wall -g -O0 ${CMAKE_CXX_FLAGS_DEBUG}")
 
 # Note: Qt6 include folder must be available. The following assumes lib/qt6 is
 # either a local copy or a symlink to it.
-set(CMAKE_PREFIX_PATH "lib/qt6")
+cmake_policy(SET CMP0115 OLD)
+set(CMAKE_PREFIX_PATH "lib/qt6/6.5.0/gcc_64/lib/cmake/")
 
 set(QT_DEFAULT_MAJOR_VERSION 6)
 find_package(Qt6 COMPONENTS Core Widgets LinguistTools Svg REQUIRED)
