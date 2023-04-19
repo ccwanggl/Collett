@@ -63,7 +63,7 @@ Item::~Item() {
 
 /**!
  * @brief Add a child item to the current item from user input.
- * 
+ *
  * Used for adding a new child item from user input. The item's UUID is generated
  * automatically. All other values are set to their defaults.
  *
@@ -89,11 +89,11 @@ Item *Item::addChild(const QString &name, ItemType type, int pos) {
 
 /**!
  * @brief Add a child item to the current item from JSON input.
- * 
+ *
  * Used for adding a new child item when loading data from a JSON file. Values
  * used for the constructor are validated. Other values will be reset to defaults
  * if they cannot be processed.
- * 
+ *
  * @param json the JSON object read from file.
  * @return a pointer to the newly added item.
  */
@@ -148,7 +148,7 @@ Item *Item::addChild(const QJsonObject &json) {
         qWarning() << "This item cannot be added as a child of this parent";
         return nullptr;
     }
-    
+
     Item *item = new Item(handle, name, m_story, type, this);
     item->setWordCount(words);
     item->setExpanded(expanded);

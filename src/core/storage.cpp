@@ -56,7 +56,7 @@ Storage::Storage(const QString &path, Mode mode, bool compact)
             m_lastError = tr("Could not find or create project storage folder: %1").arg(path);
         }
         break;
-    
+
     case Mode::Archive:
         m_lastError = "Archive storage is not yet implemented";
         break;
@@ -211,7 +211,7 @@ QString Storage::lastError() const {
 
 /**!
  * @brief Get string from JSON object.
- * 
+ *
  * @param object the json object.
  * @param key    the key of the value to look up.
  * @param def    the default value to return in case the key does not exist.

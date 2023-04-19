@@ -93,10 +93,10 @@ QJsonObject ItemModel::toJsonObject() {
 
 /**!
  * @brief Load story model from JSON object.
- * 
+ *
  * This function loads the root element data, validates it, and calls the
  * addChild method of Item on each child element defined within it.
- * 
+ *
  * @param json the JSON object to be loaded into the model.
  * @return true if data was loaded successfully, false if an error occurred.
  */

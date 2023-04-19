@@ -48,9 +48,9 @@ set(CMAKE_CXX_FLAGS_DEBUG   "-Wall -g -O0 ${CMAKE_CXX_FLAGS_DEBUG}")
 
 # Note: Qt6 include folder must be available. The following assumes lib/qt6 is
 # either a local copy or a symlink to it.
-cmake_policy(SET CMP0115 OLD)
 set(CMAKE_PREFIX_PATH "lib/qt6/6.5.0/gcc_64/lib/cmake/")
 
+cmake_policy(SET CMP0115 OLD)
 set(QT_DEFAULT_MAJOR_VERSION 6)
 find_package(Qt6 COMPONENTS Core Widgets LinguistTools Svg REQUIRED)
 if(Qt6Core_FOUND)
