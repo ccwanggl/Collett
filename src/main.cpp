@@ -24,11 +24,11 @@
 #include "collett.h"
 #include "guimain.h"
 
+#include <QApplication>
+#include <QCommandLineOption>
+#include <QCommandLineParser>
 #include <QDateTime>
 #include <QFileInfo>
-#include <QApplication>
-#include <QCommandLineParser>
-#include <QCommandLineOption>
 
 /**!
  * @brief Log message handler

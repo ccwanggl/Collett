@@ -1,6 +1,6 @@
 /*
-** Collett – Main GUI Class
-** ========================
+** Collett – GUI Main Tool Bar Class
+** =================================
 **
 ** This file is a part of Collett
 ** Copyright 2020–2024, Veronica Berglyd Olsen
@@ -19,40 +19,34 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef GUI_MAIN_H
-#define GUI_MAIN_H
-
-#include "collett.h"
-#include "maintoolbar.h"
+#ifndef GUI_MAIN_TOOLBAR_H
+#define GUI_MAIN_TOOLBAR_H
 
 #include <QAction>
-#include <QMainWindow>
 #include <QObject>
+#include <QToolBar>
+#include <QWidget>
 
 namespace Collett {
 
-class GuiMain : public QMainWindow
+class GuiMain;
+class GuiMainToolBar : public QToolBar
 {
     Q_OBJECT
 
 public:
-    GuiMain(QWidget *parent=nullptr);
-    ~GuiMain();
-
-    // GUI Components
-    GuiMainToolBar *m_mainToolBar;
-
-    // Methods
-    void openFile(const QString &path);
-    bool closeMain();
+    GuiMainToolBar(QWidget *parent=nullptr);
+    ~GuiMainToolBar() {};
 
 private:
 
-    void closeEvent(QCloseEvent*);
+    // File Menu
+    QAction *m_openFile;
+    QAction *m_saveFile;
 
-private slots:
+    friend class GuiMain;
 
 };
 } // namespace Collett
 
-#endif // GUI_MAIN_H
+#endif // GUI_MAIN_TOOLBAR_H

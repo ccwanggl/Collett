@@ -1,6 +1,6 @@
 /*
-** Collett – Main GUI Class
-** ========================
+** Collett – Core SVG Icon Engine
+** ==============================
 **
 ** This file is a part of Collett
 ** Copyright 2020–2024, Veronica Berglyd Olsen
@@ -19,40 +19,34 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef GUI_MAIN_H
-#define GUI_MAIN_H
+#ifndef SVG_ICON_ENGINE_H
+#define SVG_ICON_ENGINE_H
 
-#include "collett.h"
-#include "maintoolbar.h"
-
-#include <QAction>
-#include <QMainWindow>
-#include <QObject>
+#include <QIcon>
+#include <QRect>
+#include <QSize>
+#include <QPixmap>
+#include <QPainter>
+#include <QByteArray>
+#include <QIconEngine>
 
 namespace Collett {
 
-class GuiMain : public QMainWindow
+class SVGIconEngine : public QIconEngine
 {
-    Q_OBJECT
 
 public:
-    GuiMain(QWidget *parent=nullptr);
-    ~GuiMain();
+    explicit SVGIconEngine(const QByteArray &normal, const QByteArray &active);
 
-    // GUI Components
-    GuiMainToolBar *m_mainToolBar;
-
-    // Methods
-    void openFile(const QString &path);
-    bool closeMain();
+    void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state) override;
+    QIconEngine *clone() const override;
+    QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state) override;
 
 private:
-
-    void closeEvent(QCloseEvent*);
-
-private slots:
+    QByteArray m_iconNormal;
+    QByteArray m_iconActive;
 
 };
 } // namespace Collett
 
-#endif // GUI_MAIN_H
+#endif // SVG_ICON_ENGINE_H

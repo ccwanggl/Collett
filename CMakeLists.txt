@@ -3,7 +3,7 @@
 # ==========================
 #
 # This file is a part of Collett
-# Copyright 2020–2023, Veronica Berglyd Olsen
+# Copyright 2020–2024, Veronica Berglyd Olsen
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ set(CMAKE_CXX_FLAGS_DEBUG   "-Wall -g -O0 ${CMAKE_CXX_FLAGS_DEBUG}")
 
 cmake_policy(SET CMP0115 OLD)
 set(QT_DEFAULT_MAJOR_VERSION 6)
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Svg LinguistTools)
 if(Qt6Core_FOUND)
     message(STATUS "Found Qt6Core Version: ${Qt6Core_VERSION}")
 endif()
@@ -74,23 +74,28 @@ qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 
 # Source Folders
 include_directories(
+    src/core
+    src/gui
     src
 )
 
 # Source Files
 list(APPEND SRC_FILES
+    src/core/icons
+    src/core/svgiconengine
+    src/gui/maintoolbar
     src/guimain
     src/main
-)
-
-# Resource Files
-set(QRC_FILES
 )
 
 # Targets
 # =======
 
-qt_add_executable(Collett ${SRC_FILES} ${QRC_FILES} ${TS_FILES})
+qt_add_executable(Collett ${SRC_FILES} ${TS_FILES})
+# qt_add_resources(Collett "assets" FILES
+#     assets/fontello.ttf
+# )
+
 set_target_properties(Collett PROPERTIES OUTPUT_NAME "collett")
-target_link_libraries(Collett PRIVATE Qt::Widgets)
+target_link_libraries(Collett PRIVATE Qt::Widgets Qt::Svg)
 target_compile_definitions(Collett PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")

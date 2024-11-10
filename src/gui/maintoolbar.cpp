@@ -1,6 +1,6 @@
 /*
-** Collett – Main GUI Class
-** ========================
+** Collett – GUI Main Tool Bar Class
+** =================================
 **
 ** This file is a part of Collett
 ** Copyright 2020–2024, Veronica Berglyd Olsen
@@ -19,59 +19,30 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "guimain.h"
 #include "maintoolbar.h"
+#include "icons.h"
 
-#include <QCloseEvent>
+#include <QFont>
+#include <QSize>
+#include <QToolBar>
+#include <QWidget>
 #include <QApplication>
 
 namespace Collett {
 
-GuiMain::GuiMain(QWidget *parent) : QMainWindow(parent) {
+GuiMainToolBar::GuiMainToolBar(QWidget *parent) : QToolBar(parent) {
 
-    setWindowTitle(qApp->applicationName());
+    CollettIcons *icons = CollettIcons::instance();
 
-    // GUI Components
-    m_mainToolBar = new GuiMainToolBar(this);
+    this->setIconSize(QSize(20, 20));
 
-    this->addToolBar(Qt::TopToolBarArea, m_mainToolBar);
+    m_openFile = new QAction(icons->icon("open"), tr("Open File"));
+    this->addAction(m_openFile);
 
-    return;
-}
+    m_saveFile = new QAction(icons->icon("save"), tr("Save File"));
+    this->addAction(m_saveFile);
 
-GuiMain::~GuiMain() {
-    qDebug() << "Destructor: GuiMain";
-}
-
-/**!
- * @brief Open a Collett document.
- * 
- * @param path Path to the document.
- */
-void GuiMain::openFile(const QString &path) {
-
-}
-
-/**
- * GUI Methods
- * ===========
- */
-
-bool GuiMain::closeMain() {
-    return true;
-}
-
-/**
- * Events
- * ======
- */
-
-void GuiMain::closeEvent(QCloseEvent *event) {
-    if (closeMain()) {
-        event->accept();
-    } else {
-        event->ignore();
-    }
+    this->addSeparator();
 }
 
 } // namespace Collett

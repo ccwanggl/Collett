@@ -1,6 +1,6 @@
 /*
-** Collett – Main GUI Class
-** ========================
+** Collett – Core Icon Repository
+** ==============================
 **
 ** This file is a part of Collett
 ** Copyright 2020–2024, Veronica Berglyd Olsen
@@ -19,40 +19,41 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef GUI_MAIN_H
-#define GUI_MAIN_H
+#ifndef COLLETT_ICONS_H
+#define COLLETT_ICONS_H
 
-#include "collett.h"
-#include "maintoolbar.h"
-
-#include <QAction>
-#include <QMainWindow>
+#include <QHash>
+#include <QIcon>
 #include <QObject>
+#include <QString>
+#include <QByteArray>
 
 namespace Collett {
 
-class GuiMain : public QMainWindow
+class CollettIcons : public QObject
 {
     Q_OBJECT
 
 public:
-    GuiMain(QWidget *parent=nullptr);
-    ~GuiMain();
+    static CollettIcons *instance();
+    static void destroy();
 
-    // GUI Components
-    GuiMainToolBar *m_mainToolBar;
+    explicit CollettIcons();
+    ~CollettIcons();
 
-    // Methods
-    void openFile(const QString &path);
-    bool closeMain();
+    void setIconStyle(const QColor &normal, const QColor &active);
+
+    QIcon icon(const QString &name);
+    bool contains(const QString &name);
 
 private:
+    static CollettIcons *staticInstance;
 
-    void closeEvent(QCloseEvent*);
-
-private slots:
+    QByteArray m_svgNormal = "<svg viewBox='0 0 512 512'><path d='{data}'/></svg>";
+    QByteArray m_svgActive = "<svg viewBox='0 0 512 512'><path d='{data}'/></svg>";
+    QHash<QString, QByteArray> m_svgPath;
 
 };
 } // namespace Collett
 
-#endif // GUI_MAIN_H
+#endif // COLLETT_ICONS_H
