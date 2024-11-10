@@ -52,7 +52,7 @@ set(CMAKE_CXX_FLAGS_DEBUG   "-Wall -g -O0 ${CMAKE_CXX_FLAGS_DEBUG}")
 
 cmake_policy(SET CMP0115 OLD)
 set(QT_DEFAULT_MAJOR_VERSION 6)
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools Svg)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools)
 if(Qt6Core_FOUND)
     message(STATUS "Found Qt6Core Version: ${Qt6Core_VERSION}")
 endif()
@@ -74,34 +74,13 @@ qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 
 # Source Folders
 include_directories(
-    src/core
-    src/editor
-    src/gui
-    src/project
     src
 )
 
 # Source Files
 list(APPEND SRC_FILES
-    src/core/data
-    src/core/icons
-    src/core/storage
-    src/core/svgiconengine
-    src/editor/doceditor
-    src/editor/edittoolbar
-    src/editor/textedit
-    src/gui/itemtree
-    src/gui/itemtreedelegate
-    src/gui/maintoolbar
-    src/gui/statusbar
-    src/gui/treetoolbar
-    src/project/document
-    src/project/item
-    src/project/itemmodel
-    src/project/project
     src/guimain
     src/main
-    src/settings
 )
 
 # Resource Files
@@ -113,5 +92,5 @@ set(QRC_FILES
 
 qt_add_executable(Collett ${SRC_FILES} ${QRC_FILES} ${TS_FILES})
 set_target_properties(Collett PROPERTIES OUTPUT_NAME "collett")
-target_link_libraries(Collett PRIVATE Qt::Widgets Qt::Svg)
+target_link_libraries(Collett PRIVATE Qt::Widgets)
 target_compile_definitions(Collett PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
