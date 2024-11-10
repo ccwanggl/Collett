@@ -52,7 +52,7 @@ set(CMAKE_CXX_FLAGS_DEBUG   "-Wall -g -O0 ${CMAKE_CXX_FLAGS_DEBUG}")
 
 cmake_policy(SET CMP0115 OLD)
 set(QT_DEFAULT_MAJOR_VERSION 6)
-find_package(Qt6 COMPONENTS Core Widgets LinguistTools Svg REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools Svg)
 if(Qt6Core_FOUND)
     message(STATUS "Found Qt6Core Version: ${Qt6Core_VERSION}")
 endif()
