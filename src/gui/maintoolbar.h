@@ -44,6 +44,30 @@ private:
     QAction *m_openFile;
     QAction *m_saveFile;
 
+    // Paragraph Formatting
+    QAction *m_formatHeading;
+
+    // Char Formatting
+    QAction *m_formatBold;
+    QAction *m_formatItalic;
+    QAction *m_formatUnderline;
+    QAction *m_formatStrike;
+    QAction *m_formatSuper;
+    QAction *m_formatSub;
+
+    // Text Align
+    QAction *m_alignLeft;
+    QAction *m_alignCenter;
+    QAction *m_alignRight;
+    QAction *m_alignJustify;
+
+    // Block Format
+    QAction *m_textIndent;
+    QAction *m_textOutdent;
+
+    // Text Tools
+    QAction *m_textHighlight;
+
     friend class GuiMain;
 
 };
