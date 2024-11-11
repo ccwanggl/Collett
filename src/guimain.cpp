@@ -21,6 +21,7 @@
 
 #include "guimain.h"
 #include "maintoolbar.h"
+#include "settings.h"
 
 #include <QCloseEvent>
 #include <QApplication>
@@ -30,6 +31,10 @@ namespace Collett {
 GuiMain::GuiMain(QWidget *parent) : QMainWindow(parent) {
 
     setWindowTitle(qApp->applicationName());
+
+    // Settings
+    CollettSettings *mainConf = CollettSettings::instance();
+    resize(mainConf->mainWindowSize());
 
     // GUI Components
     m_mainToolBar = new GuiMainToolBar(this);
@@ -58,6 +63,14 @@ void GuiMain::openFile(const QString &path) {
  */
 
 bool GuiMain::closeMain() {
+
+    // Save Settings
+    CollettSettings *mainConf = CollettSettings::instance();
+    if (!this->isFullScreen()) {
+        mainConf->setMainWindowSize(this->size());
+    }
+    mainConf->flushSettings();
+
     return true;
 }
 

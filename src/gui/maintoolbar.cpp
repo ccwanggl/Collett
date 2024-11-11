@@ -34,7 +34,7 @@ GuiMainToolBar::GuiMainToolBar(QWidget *parent) : QToolBar(parent) {
 
     CollettIcons *icons = CollettIcons::instance();
 
-    this->setIconSize(QSize(20, 20));
+    this->setIconSize(QSize(16, 16));
 
     m_openFile = new QAction(icons->icon("open"), tr("Open File"));
     this->addAction(m_openFile);

@@ -26,6 +26,7 @@ string(REGEX MATCH "#define[ ]+COL_VERSION_STR[ ]+\"([0-9a-z\.\-]+)\"" _ ${COLLE
 set(Collett_RELEASE ${CMAKE_MATCH_1})
 string(REGEX MATCH "([0-9\.]*)" _ ${Collett_RELEASE})
 set(Collett_VERSION ${CMAKE_MATCH_1})
+set (CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build.")
 
 message(STATUS "Collett Version: ${Collett_VERSION}")
 message(STATUS "Collett Release: ${Collett_RELEASE}")
@@ -82,6 +83,7 @@ include_directories(
 # Source Files
 list(APPEND SRC_FILES
     src/core/icons
+    src/core/settings
     src/core/svgiconengine
     src/gui/maintoolbar
     src/guimain
@@ -92,9 +94,9 @@ list(APPEND SRC_FILES
 # =======
 
 qt_add_executable(Collett ${SRC_FILES} ${TS_FILES})
-# qt_add_resources(Collett "assets" FILES
-#     assets/fontello.ttf
-# )
+qt_add_resources(Collett "assets" FILES
+    assets/styles.qss
+)
 
 set_target_properties(Collett PROPERTIES OUTPUT_NAME "collett")
 target_link_libraries(Collett PRIVATE Qt::Widgets Qt::Svg)

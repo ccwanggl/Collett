@@ -28,6 +28,7 @@
 #include <QCommandLineOption>
 #include <QCommandLineParser>
 #include <QDateTime>
+#include <QFile>
 #include <QFileInfo>
 
 /**!
@@ -91,6 +92,11 @@ int main(int argc, char *argv[]) {
     if (parser.isSet(openPath)) {
         mainGUI.openFile(parser.value(openPath));
     }
+
+    // Styles
+    QFile styles(":/assets/styles.qss");
+    styles.open(QFile::ReadOnly);
+    app.setStyleSheet(QLatin1String(styles.readAll()));
 
     return app.exec();
 }
