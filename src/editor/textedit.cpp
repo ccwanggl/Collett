@@ -337,7 +337,7 @@ void GuiTextEdit::toggleUnderlineFormat() {
     this->setFontUnderline(!this->fontUnderline());
 }
 
-void GuiTextEdit::toggleStrikeOutFormat() {
+void GuiTextEdit::toggleStrikeFormat() {
     QFont font = this->currentFont();
     font.setStrikeOut(!font.strikeOut());
     this->setCurrentFont(font);

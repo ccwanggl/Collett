@@ -44,6 +44,59 @@ GuiMain::GuiMain(QWidget *parent) : QMainWindow(parent) {
     this->addToolBar(Qt::TopToolBarArea, m_mainToolBar);
     this->setCentralWidget(m_textEditor);
 
+    // Connect Signals
+    // ===============
+
+    // ToolBar Paragraph Formatting
+    connect(m_mainToolBar->m_formatHeading1, &QAction::triggered,
+            [this]{m_textEditor->applyBlockFormat(GuiTextEdit::Header, 1);});
+    connect(m_mainToolBar->m_formatHeading2, &QAction::triggered,
+            [this]{m_textEditor->applyBlockFormat(GuiTextEdit::Header, 2);});
+    connect(m_mainToolBar->m_formatHeading3, &QAction::triggered,
+            [this]{m_textEditor->applyBlockFormat(GuiTextEdit::Header, 3);});
+    connect(m_mainToolBar->m_formatHeading4, &QAction::triggered,
+            [this]{m_textEditor->applyBlockFormat(GuiTextEdit::Header, 4);});
+    connect(m_mainToolBar->m_formatParagraph, &QAction::triggered,
+            [this]{m_textEditor->applyBlockFormat(GuiTextEdit::Paragraph, 0);});
+
+    // ToolBar Char Formatting
+    connect(m_mainToolBar->m_formatBold, SIGNAL(triggered()),
+            m_textEditor, SLOT(toggleBoldFormat()));
+    connect(m_mainToolBar->m_formatItalic, SIGNAL(triggered()),
+            m_textEditor, SLOT(toggleItalicFormat()));
+    connect(m_mainToolBar->m_formatUnderline, SIGNAL(triggered()),
+            m_textEditor, SLOT(toggleUnderlineFormat()));
+    connect(m_mainToolBar->m_formatStrike, SIGNAL(triggered()),
+            m_textEditor, SLOT(toggleStrikeFormat()));
+    connect(m_mainToolBar->m_formatSuper, SIGNAL(triggered()),
+            m_textEditor, SLOT(toggleSuperScriptFormat()));
+    connect(m_mainToolBar->m_formatSub, SIGNAL(triggered()),
+            m_textEditor, SLOT(toggleSubScriptFormat()));
+
+    // ToolBar Text Align
+    connect(m_mainToolBar->m_alignLeft, &QAction::triggered,
+            [this]{m_textEditor->applyBlockAlignment(Qt::AlignLeft);});
+    connect(m_mainToolBar->m_alignCenter, &QAction::triggered,
+            [this]{m_textEditor->applyBlockAlignment(Qt::AlignHCenter);});
+    connect(m_mainToolBar->m_alignRight, &QAction::triggered,
+            [this]{m_textEditor->applyBlockAlignment(Qt::AlignRight);});
+    connect(m_mainToolBar->m_alignJustify, &QAction::triggered,
+            [this]{m_textEditor->applyBlockAlignment(Qt::AlignJustify);});
+
+    // ToolBar Block Format
+    connect(m_mainToolBar->m_lineIndent, SIGNAL(triggered()),
+            m_textEditor, SLOT(toggleFirstLineIndent()));
+    connect(m_mainToolBar->m_textIndent, SIGNAL(triggered()),
+            m_textEditor, SLOT(increaseBlockIndent()));
+    connect(m_mainToolBar->m_textOutdent, SIGNAL(triggered()),
+            m_textEditor, SLOT(decreaseBlockIndent()));
+
+    // Editor Return Format Signals
+    connect(m_textEditor, SIGNAL(currentCharFormatChanged(const QTextCharFormat&)),
+            m_mainToolBar, SLOT(editorCharFormatChanged(const QTextCharFormat&)));
+    connect(m_textEditor, SIGNAL(currentBlockChanged(const QTextBlock&)),
+            m_mainToolBar, SLOT(editorBlockChanged(const QTextBlock&)));
+
     return;
 }
 

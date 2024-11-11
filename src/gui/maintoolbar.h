@@ -23,8 +23,12 @@
 #define GUI_MAIN_TOOLBAR_H
 
 #include <QAction>
+#include <QActionGroup>
 #include <QObject>
+#include <QTextBlock>
+#include <QTextCharFormat>
 #include <QToolBar>
+#include <QToolButton>
 #include <QWidget>
 
 namespace Collett {
@@ -38,14 +42,28 @@ public:
     GuiMainToolBar(QWidget *parent=nullptr);
     ~GuiMainToolBar() {};
 
+public slots:
+    void editorCharFormatChanged(const QTextCharFormat &fmt);
+    void editorBlockChanged(const QTextBlock &block);
+
 private:
+
+    // Groups
+    QActionGroup *m_formatTextGroup;
+    QActionGroup *m_alignTextGroup;
 
     // File Menu
     QAction *m_openFile;
     QAction *m_saveFile;
 
     // Paragraph Formatting
-    QAction *m_formatHeading;
+    QToolButton *m_formatHeading;
+    QMenu       *m_formatHeadingMenu;
+    QAction     *m_formatHeading1;
+    QAction     *m_formatHeading2;
+    QAction     *m_formatHeading3;
+    QAction     *m_formatHeading4;
+    QAction     *m_formatParagraph;
 
     // Char Formatting
     QAction *m_formatBold;
@@ -62,6 +80,7 @@ private:
     QAction *m_alignJustify;
 
     // Block Format
+    QAction *m_lineIndent;
     QAction *m_textIndent;
     QAction *m_textOutdent;
 

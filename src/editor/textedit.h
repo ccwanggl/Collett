@@ -74,7 +74,7 @@ public slots:
     void toggleBoldFormat();
     void toggleItalicFormat();
     void toggleUnderlineFormat();
-    void toggleStrikeOutFormat();
+    void toggleStrikeFormat();
     void toggleSuperScriptFormat();
     void toggleSubScriptFormat();
     void toggleSegmentFormat();
