@@ -22,11 +22,12 @@
 #ifndef COLLETT_ICONS_H
 #define COLLETT_ICONS_H
 
+#include <QByteArray>
 #include <QHash>
 #include <QIcon>
 #include <QObject>
+#include <QSize>
 #include <QString>
-#include <QByteArray>
 
 namespace Collett {
 
@@ -52,6 +53,7 @@ private:
     QByteArray m_svgNormal = "<svg viewBox='0 0 512 512'><path d='{data}'/></svg>";
     QByteArray m_svgActive = "<svg viewBox='0 0 512 512'><path d='{data}'/></svg>";
     QHash<QString, QByteArray> m_svgPath;
+    QHash<QString, QSize>      m_svgSize;
 
 };
 } // namespace Collett

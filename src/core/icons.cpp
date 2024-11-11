@@ -66,6 +66,7 @@ CollettIcons::CollettIcons() {
     // ========
 
     // folder-open-regular.svg
+    m_svgSize["open"] = QSize(576, 512);
     m_svgPath["open"] = QByteArray(
         "M384 480l48 0c11.4 0 21.9-6 27.6-15.9l112-192c5.8-9.9 5.8-22.1 .1-32.1S555.5 224 544 224l"
         "-400 0c-11.4 0-21.9 6-27.6 15.9L48 357.1 48 96c0-8.8 7.2-16 16-16l117.5 0c4.2 0 8.3 1.7 1"
@@ -75,6 +76,7 @@ CollettIcons::CollettIcons() {
     );
 
     // hard-drive-regular.svg
+    m_svgSize["save"] = QSize(512, 512);
     m_svgPath["save"] = QByteArray(
         "M64 80c-8.8 0-16 7.2-16 16l0 162c5.1-1.3 10.5-2 16-2l384 0c5.5 0 10.9 .7 16 2l0-162c0-8.8"
         "-7.2-16-16-16L64 80zM48 320l0 96c0 8.8 7.2 16 16 16l384 0c8.8 0 16-7.2 16-16l0-96c0-8.8-7"
@@ -89,6 +91,7 @@ CollettIcons::CollettIcons() {
     // Paragraph Format
 
     // heading-solid.svg
+    m_svgSize["heading"] = QSize(448, 512);
     m_svgPath["heading"] = QByteArray(
         "M0 64C0 46.3 14.3 32 32 32l48 0 48 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-16 0 0 112 224 "
         "0 0-112-16 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l48 0 48 0c17.7 0 32 14.3 32 32s-14.3 32-"
@@ -98,6 +101,7 @@ CollettIcons::CollettIcons() {
     );
 
     // paragraph-solid.svg
+    m_svgSize["paragraph"] = QSize(448, 512);
     m_svgPath["paragraph"] = QByteArray(
         "M192 32l64 0 160 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-32 0 0 352c0 17.7-14.3 32-32 32s-"
         "32-14.3-32-32l0-352-32 0 0 352c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-96-32 0c-88.4 0-160-"
@@ -107,6 +111,7 @@ CollettIcons::CollettIcons() {
     // Char Format
 
     // bold-solid.svg
+    m_svgSize["bold"] = QSize(384, 512);
     m_svgPath["bold"] = QByteArray(
         "M0 64C0 46.3 14.3 32 32 32l48 0 16 0 128 0c70.7 0 128 57.3 128 128c0 31.3-11.3 60.1-30 82"
         ".3c37.1 22.4 62 63.1 62 109.7c0 70.7-57.3 128-128 128L96 480l-16 0-48 0c-17.7 0-32-14.3-3"
@@ -116,6 +121,7 @@ CollettIcons::CollettIcons() {
     );
 
     // italic-solid.svg
+    m_svgSize["italic"] = QSize(384, 512);
     m_svgPath["italic"] = QByteArray(
         "M128 64c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-58.7 0L160 416l64"
         " 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 480c-17.7 0-32-14.3-32-32s14.3-32 32-32l58.7 0L"
@@ -123,6 +129,7 @@ CollettIcons::CollettIcons() {
     );
 
     // underline-solid.svg
+    m_svgSize["underline"] = QSize(448, 512);
     m_svgPath["underline"] = QByteArray(
         "M16 64c0-17.7 14.3-32 32-32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-16 0 0 128c0 53 43 "
         "96 96 96s96-43 96-96l0-128-16 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l96 0c17.7 0 32 14.3 3"
@@ -132,6 +139,7 @@ CollettIcons::CollettIcons() {
     );
 
     // strikethrough-solid.svg
+    m_svgSize["strikethrough"] = QSize(512, 512);
     m_svgPath["strikethrough"] = QByteArray(
         "M161.3 144c3.2-17.2 14-30.1 33.7-38.6c21.1-9 51.8-12.3 88.6-6.5c11.9 1.9 48.8 9.1 60.1 12"
         "c17.1 4.5 34.6-5.6 39.2-22.7s-5.6-34.6-22.7-39.2c-14.3-3.8-53.6-11.4-66.6-13.4c-44.7-7-88"
@@ -147,6 +155,7 @@ CollettIcons::CollettIcons() {
     );
 
     // superscript-solid.svg
+    m_svgSize["superscript"] = QSize(512, 512);
     m_svgPath["superscript"] = QByteArray(
         "M480 32c0-11.1-5.7-21.4-15.2-27.2s-21.2-6.4-31.1-1.4l-32 16c-15.8 7.9-22.2 27.1-14.3 42.9"
         "C393 73.5 404.3 80 416 80l0 80c-17.7 0-32 14.3-32 32s14.3 32 32 32l32 0 32 0c17.7 0 32-14"
@@ -158,6 +167,7 @@ CollettIcons::CollettIcons() {
     );
 
     // subscript-solid.svg
+    m_svgSize["subscript"] = QSize(512, 512);
     m_svgPath["subscript"] = QByteArray(
         "M32 64C14.3 64 0 78.3 0 96s14.3 32 32 32l15.3 0 89.6 128L47.3 384 32 384c-17.7 0-32 14.3-"
         "32 32s14.3 32 32 32l32 0c10.4 0 20.2-5.1 26.2-13.6L176 311.8l85.8 122.6c6 8.6 15.8 13.6 2"
@@ -171,6 +181,7 @@ CollettIcons::CollettIcons() {
     // Alignment
 
     // align-left-solid.svg
+    m_svgSize["align-left"] = QSize(448, 512);
     m_svgPath["align-left"] = QByteArray(
         "M288 64c0 17.7-14.3 32-32 32L32 96C14.3 96 0 81.7 0 64S14.3 32 32 32l224 0c17.7 0 32 14.3"
         " 32 32zm0 256c0 17.7-14.3 32-32 32L32 352c-17.7 0-32-14.3-32-32s14.3-32 32-32l224 0c17.7 "
@@ -180,6 +191,7 @@ CollettIcons::CollettIcons() {
     );
 
     // align-center-solid.svg
+    m_svgSize["align-center"] = QSize(448, 512);
     m_svgPath["align-center"] = QByteArray(
         "M352 64c0-17.7-14.3-32-32-32L128 32c-17.7 0-32 14.3-32 32s14.3 32 32 32l192 0c17.7 0 32-1"
         "4.3 32-32zm96 128c0-17.7-14.3-32-32-32L32 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c1"
@@ -189,6 +201,7 @@ CollettIcons::CollettIcons() {
     );
 
     // align-right-solid.svg
+    m_svgSize["align-right"] = QSize(448, 512);
     m_svgPath["align-right"] = QByteArray(
         "M448 64c0 17.7-14.3 32-32 32L192 96c-17.7 0-32-14.3-32-32s14.3-32 32-32l224 0c17.7 0 32 1"
         "4.3 32 32zm0 256c0 17.7-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l224 0c17"
@@ -198,6 +211,7 @@ CollettIcons::CollettIcons() {
     );
 
     // align-justify-solid.svg
+    m_svgSize["align-justify"] = QSize(448, 512);
     m_svgPath["align-justify"] = QByteArray(
         "M448 64c0-17.7-14.3-32-32-32L32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3"
         " 32-32zm0 256c0-17.7-14.3-32-32-32L32 288c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 "
@@ -208,7 +222,17 @@ CollettIcons::CollettIcons() {
 
     // Block Format
 
+    // line-indent-solid.svg
+    m_svgSize["line-indent"] = QSize(448, 512);
+    m_svgPath["line-indent"] = QByteArray(
+        "m192 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h224c17.7 0 32-14.3 32-32s-14.3-32-32-32h-224z"
+        "m-160 128c-17.7 0-32 14.3-32 32s14.3 32 32 32h384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-38"
+        "4zm0 128c-17.7 0-32 14.3-32 32s14.3 32 32 32h384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-384"
+        "zm0 128c-17.7 0-32 14.3-32 32s14.3 32 32 32h384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-384z"
+    );
+
     // indent-solid.svg
+    m_svgSize["indent"] = QSize(448, 512);
     m_svgPath["indent"] = QByteArray(
         "M0 64C0 46.3 14.3 32 32 32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 96C14.3 96 0 81.7"
         " 0 64zM192 192c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-192 0c-17."
@@ -219,6 +243,7 @@ CollettIcons::CollettIcons() {
     );
 
     // outdent-solid.svg
+    m_svgSize["outdent"] = QSize(448, 512);
     m_svgPath["outdent"] = QByteArray(
         "M0 64C0 46.3 14.3 32 32 32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 96C14.3 96 0 81.7"
         " 0 64zM192 192c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-192 0c-17."
@@ -231,6 +256,7 @@ CollettIcons::CollettIcons() {
     // Text Tools
 
     // highlighter-solid.svg
+    m_svgSize["highlighter"] = QSize(576, 512);
     m_svgPath["highlighter"] = QByteArray(
         "M315 315l158.4-215L444.1 70.6 229 229 315 315zm-187 5s0 0 0 0l0-71.7c0-15.3 7.2-29.6 19.5"
         "-38.6L420.6 8.4C428 2.9 437 0 446.2 0c11.4 0 22.4 4.5 30.5 12.6l54.8 54.8c8.1 8.1 12.6 19"
@@ -241,6 +267,7 @@ CollettIcons::CollettIcons() {
     );
 
     // spell-check-solid.svg
+    m_svgSize["spell-check"] = QSize(576, 512);
     m_svgPath["spell-check"] = QByteArray(
         "M112 0C99.1 0 87.4 7.8 82.5 19.7l-66.7 160-13.3 32c-6.8 16.3 .9 35 17.2 41.8s35-.9 41.8-1"
         "7.2L66.7 224l90.7 0 5.1 12.3c6.8 16.3 25.5 24 41.8 17.2s24-25.5 17.2-41.8l-13.3-32-66.7-1"
@@ -259,13 +286,13 @@ CollettIcons::~CollettIcons() {
 }
 
 void CollettIcons::setIconStyle(const QColor &normal, const QColor &active) {
-    m_svgNormal = QByteArray("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='")
+    m_svgNormal = QByteArray("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {size}' fill='")
         .append(normal.name(QColor::HexRgb).toLatin1())
         .append("' opacity='")
         .append(QByteArray().setNum(normal.alphaF()))
         .append("'><path d='{data}'/></svg>");
 
-    m_svgActive = QByteArray("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='")
+    m_svgActive = QByteArray("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {size}' fill='")
         .append(active.name(QColor::HexRgb).toLatin1())
         .append("' opacity='")
         .append(QByteArray().setNum(active.alphaF()))
@@ -273,10 +300,13 @@ void CollettIcons::setIconStyle(const QColor &normal, const QColor &active) {
 }
 
 QIcon CollettIcons::icon(const QString &name) {
+    QByteArray path = m_svgPath[name];
+    QSize size = m_svgSize[name];
+    QByteArray box = QByteArray().setNum(size.width()).append(QByteArray().setNum(size.height()));
     return QIcon(
         new SVGIconEngine(
-            QByteArray().append(m_svgNormal).replace("{data}", m_svgPath[name]),
-            QByteArray().append(m_svgActive).replace("{data}", m_svgPath[name])
+            QByteArray().append(m_svgNormal).replace("{data}", path).replace("{size}", box),
+            QByteArray().append(m_svgActive).replace("{data}", path).replace("{size}", box)
         )
     );
 }
