@@ -75,6 +75,7 @@ qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 
 # Source Folders
 include_directories(
+    src/editor
     src/core
     src/gui
     src
@@ -82,6 +83,7 @@ include_directories(
 
 # Source Files
 list(APPEND SRC_FILES
+    src/editor/textedit
     src/core/icons
     src/core/settings
     src/core/svgiconengine

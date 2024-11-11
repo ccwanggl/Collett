@@ -22,6 +22,7 @@
 #include "guimain.h"
 #include "maintoolbar.h"
 #include "settings.h"
+#include "textedit.h"
 
 #include <QCloseEvent>
 #include <QApplication>
@@ -38,8 +39,10 @@ GuiMain::GuiMain(QWidget *parent) : QMainWindow(parent) {
 
     // GUI Components
     m_mainToolBar = new GuiMainToolBar(this);
+    m_textEditor  = new GuiTextEdit(this);
 
     this->addToolBar(Qt::TopToolBarArea, m_mainToolBar);
+    this->setCentralWidget(m_textEditor);
 
     return;
 }

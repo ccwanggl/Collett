@@ -24,6 +24,7 @@
 
 #include "collett.h"
 #include "maintoolbar.h"
+#include "textedit.h"
 
 #include <QAction>
 #include <QMainWindow>
@@ -41,6 +42,7 @@ public:
 
     // GUI Components
     GuiMainToolBar *m_mainToolBar;
+    GuiTextEdit    *m_textEditor;
 
     // Methods
     void openFile(const QString &path);
