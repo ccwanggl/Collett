@@ -3,7 +3,7 @@
 ** ==============================
 **
 ** This file is a part of Collett
-** Copyright 2020–2023, Veronica Berglyd Olsen
+** Copyright 2020–2024, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -21,13 +21,15 @@
 
 #include "svgiconengine.h"
 
+#include <QApplication>
+#include <QByteArray>
+#include <QDebug>
+#include <QPalette>
 #include <QIcon>
+#include <QPainter>
+#include <QPixmap>
 #include <QRect>
 #include <QSize>
-#include <QDebug>
-#include <QPixmap>
-#include <QPainter>
-#include <QByteArray>
 #include <QSvgRenderer>
 
 namespace Collett {
@@ -38,11 +40,17 @@ namespace Collett {
  * Based on: https://stackoverflow.com/a/44757951
  */
 
-SVGIconEngine::SVGIconEngine(const QByteArray &iconBuffer) : m_iconData(iconBuffer) {}
+SVGIconEngine::SVGIconEngine(const QByteArray &normal, const QByteArray &active) :
+    m_iconNormal(normal), m_iconActive(active) {}
 
 void SVGIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state) {
-    QSvgRenderer renderer(m_iconData);
-    renderer.render(painter, rect);
+    if(mode == QIcon::Active) {
+        QSvgRenderer renderer(m_iconActive);
+        renderer.render(painter, rect);
+    } else {
+        QSvgRenderer renderer(m_iconNormal);
+        renderer.render(painter, rect);
+    }
 }
 
 QIconEngine *SVGIconEngine::clone() const {

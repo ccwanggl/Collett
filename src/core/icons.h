@@ -3,7 +3,7 @@
 ** ==============================
 **
 ** This file is a part of Collett
-** Copyright 2020–2023, Veronica Berglyd Olsen
+** Copyright 2020–2024, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -22,11 +22,12 @@
 #ifndef COLLETT_ICONS_H
 #define COLLETT_ICONS_H
 
+#include "collett.h"
+
+#include <QByteArray>
 #include <QHash>
 #include <QIcon>
-#include <QObject>
-#include <QString>
-#include <QByteArray>
+#include <QSize>
 
 namespace Collett {
 
@@ -41,7 +42,7 @@ public:
     explicit CollettIcons();
     ~CollettIcons();
 
-    void setIconStyle(const QColor &foreground, qreal opacity);
+    void setIconStyle(const QColor &normal, const QColor &active);
 
     QIcon icon(const QString &name);
     bool contains(const QString &name);
@@ -49,9 +50,10 @@ public:
 private:
     static CollettIcons *staticInstance;
 
-    QByteArray m_svgTemplateA = "<svg viewBox='0 0 24 24'><path d='";
-    QByteArray m_svgTemplateB = "'/></svg>";
+    QByteArray m_svgNormal = "<svg viewBox='0 0 512 512'><path d='{data}'/></svg>";
+    QByteArray m_svgActive = "<svg viewBox='0 0 512 512'><path d='{data}'/></svg>";
     QHash<QString, QByteArray> m_svgPath;
+    QHash<QString, QSize>      m_svgSize;
 
 };
 } // namespace Collett

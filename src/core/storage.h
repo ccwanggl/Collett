@@ -3,7 +3,7 @@
 ** ============================
 **
 ** This file is a part of Collett
-** Copyright 2020–2023, Veronica Berglyd Olsen
+** Copyright 2020–2024, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -22,13 +22,10 @@
 #ifndef COLLETT_STORAGE_H
 #define COLLETT_STORAGE_H
 
+#include "collett.h"
+
 #include <QDir>
-#include <QList>
-#include <QUuid>
-#include <QObject>
-#include <QString>
 #include <QJsonObject>
-#include <QLatin1String>
 
 namespace Collett {
 
@@ -37,21 +34,15 @@ class Storage : public QObject
     Q_OBJECT
 
 public:
-    enum Mode{Folder, Archive};
+    enum Mode{Flat, Archive};
 
-    explicit Storage(const QString &path, Mode mode, bool compact=false);
+    explicit Storage(const QString &path, bool compact=false);
     ~Storage();
 
     // Class Methods
 
-    bool loadFile(const QString &fileName, QJsonObject &fileData);
-    bool loadFile(const QUuid &fileUuid, QJsonObject &fileData);
-    bool saveFile(const QString &fileName, const QJsonObject &fileData);
-    bool saveFile(const QUuid &fileUuid, const QJsonObject &fileData);
-    bool loadProjectFile();
-    bool saveProjectFile();
-
-    QList<QUuid> listContent() const;
+    bool readProject(QJsonObject &fileData);
+    bool writeProject(const QJsonObject &fileData);
 
     bool isValid();
     QString projectPath() const;
@@ -64,8 +55,7 @@ public:
 
 private:
     bool readJson(const QString &filePath, QJsonObject &fileData);
-    bool writeJson(const QString &filePath, const QJsonObject &fileData);
-    bool ensureFolder(const QString &folder);
+    bool writeJson(const QString &filePath, const QJsonObject &fileData, bool compact);
 
     QDir m_rootPath;
     Mode m_saveMode;

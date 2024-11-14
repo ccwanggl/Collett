@@ -3,7 +3,7 @@
 ** =======================
 **
 ** This file is a part of Collett
-** Copyright 2020–2023, Veronica Berglyd Olsen
+** Copyright 2020–2024, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -24,11 +24,12 @@
 #include "collett.h"
 #include "guimain.h"
 
-#include <QDateTime>
-#include <QFileInfo>
 #include <QApplication>
-#include <QCommandLineParser>
 #include <QCommandLineOption>
+#include <QCommandLineParser>
+#include <QDateTime>
+#include <QFile>
+#include <QFileInfo>
 
 /**!
  * @brief Log message handler
@@ -78,19 +79,24 @@ int main(int argc, char *argv[]) {
     parser.addHelpOption();
     parser.addVersionOption();
 
-    QCommandLineOption openFlag(
+    QCommandLineOption openPath(
         QStringList() << "o" << "open",
         QCoreApplication::translate("main", "Open the <path> project on launch."),
         QCoreApplication::translate("main", "path")
     );
-    parser.addOption(openFlag);
+    parser.addOption(openPath);
     parser.process(app);
 
     Collett::GuiMain mainGUI;
     mainGUI.show();
-    if (parser.isSet(openFlag)) {
-        mainGUI.openProject(parser.value(openFlag));
+    if (parser.isSet(openPath)) {
+        mainGUI.openFile(parser.value(openPath));
     }
+
+    // Styles
+    QFile styles(":/assets/styles.qss");
+    styles.open(QFile::ReadOnly);
+    app.setStyleSheet(QLatin1String(styles.readAll()));
 
     return app.exec();
 }

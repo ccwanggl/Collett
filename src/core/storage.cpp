@@ -3,7 +3,7 @@
 ** ============================
 **
 ** This file is a part of Collett
-** Copyright 2020–2023, Veronica Berglyd Olsen
+** Copyright 2020–2024, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -19,47 +19,36 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "collett.h"
 #include "storage.h"
 
 #include <QDir>
 #include <QFile>
-#include <QList>
-#include <QUuid>
-#include <QString>
 #include <QFileInfo>
-#include <QJsonObject>
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QJsonParseError>
 
 namespace Collett {
 
-Storage::Storage(const QString &path, Mode mode, bool compact)
-    : m_saveMode(mode), m_compactJson(compact)
+Storage::Storage(const QString &path, bool compact) : m_compactJson(compact)
 {
     QFileInfo pathInfo(path);
-    switch (m_saveMode) {
-
-    case Mode::Folder:
-        m_rootPath = QDir(QDir(path).absolutePath());
-
-        if (!pathInfo.exists()) {
-            QDir parDir = pathInfo.dir();
-            if (parDir.exists()) {
-                m_isValid = m_rootPath.mkpath(".");
-            }
-        } else {
-            m_isValid = pathInfo.isDir();
-        }
-
-        if (!m_isValid) {
-            m_lastError = tr("Could not find or create project storage folder: %1").arg(path);
-        }
-        break;
-
-    case Mode::Archive:
+    if (pathInfo.suffix().toLower() == "fcollett") {
+        m_saveMode = Storage::Flat;
+        m_isValid = pathInfo.isWritable();
+    } else if (pathInfo.suffix().toLower() == "collett") {
+        m_saveMode = Storage::Archive;
+        m_isValid = pathInfo.isWritable();
+    } else {
         m_lastError = "Archive storage is not yet implemented";
-        break;
+        m_saveMode = Storage::Archive;
+        m_isValid = false;
+        qWarning() << "Invalid path:" << path;
+    }
+    if (m_isValid) {
+        m_rootPath = QDir(QDir(path).absolutePath());
+    } else {
+        m_rootPath = QDir();
     }
 
     qDebug() << "Root Path:" << m_rootPath.path();
@@ -73,116 +62,30 @@ Storage::~Storage() {
  * Class Methods
  */
 
-bool Storage::loadFile(const QString &fileName, QJsonObject &fileData) {
-    if (!ensureFolder("project")) {
-        return false;
-    }
-    QString filePath = QDir(m_rootPath.path() + "/project").filePath(fileName + ".json");
-    return readJson(filePath, fileData);
-}
-
-bool Storage::loadFile(const QUuid &fileUuid, QJsonObject &fileData) {
-    if (!ensureFolder("content")) {
-        return false;
-    }
-    QString filePath = QDir(m_rootPath.path() + "/content").filePath(fileUuid.toString(QUuid::WithoutBraces) + ".json");
-    return readJson(filePath, fileData);
-}
-
-bool Storage::saveFile(const QString &fileName, const QJsonObject &fileData) {
-    if (!ensureFolder("project")) {
-        return false;
-    }
-    QString filePath = QDir(m_rootPath.path() + "/project").filePath(fileName + ".json");
-    return writeJson(filePath, fileData);
-}
-
-bool Storage::saveFile(const QUuid &fileUuid, const QJsonObject &fileData) {
-    if (!ensureFolder("content")) {
-        return false;
-    }
-    QString filePath = QDir(m_rootPath.path() + "/content").filePath(fileUuid.toString(QUuid::WithoutBraces) + ".json");
-    return writeJson(filePath, fileData);
-}
-
-bool Storage::loadProjectFile() {
+bool Storage::readProject(QJsonObject &fileData) {
 
     if (!m_isValid) {
         return false;
     }
 
-    bool hasCol = false;
-    bool hasPro = false;
-
-    QFile prjFile(m_rootPath.filePath("project.collett"));
-    if (prjFile.open(QIODevice::ReadOnly)) {
-        QString line;
-        QTextStream inStream(&prjFile);
-        while (!inStream.atEnd()) {
-            line = inStream.readLine();
-            if (line.startsWith("Collett ")) {
-                m_collettVersion = line.remove(0, 8);
-                hasCol = true;
-            } else if (line.startsWith("Project ")) {
-                m_projectVersion = line.remove(0, 8);
-                hasPro = true;
-            }
-        }
-        prjFile.close();
-        qInfo() << "File Collett Version:" << m_collettVersion;
-        qInfo() << "File Project Version:" << m_projectVersion;
-        return hasCol & hasPro;
-    } else {
-        return false;
+    if (m_saveMode == Mode::Flat) {
+        return this->readJson(m_rootPath.path(), fileData);
     }
+
+    return false;
 }
 
-bool Storage::saveProjectFile() {
+bool Storage::writeProject(const QJsonObject &fileData) {
 
     if (!m_isValid) {
         return false;
     }
 
-    QByteArray colLine = "Collett " + QByteArray(COL_VERSION_STR);
-    QByteArray proLine = "Project 0.1";
-
-    QFile prjFile(m_rootPath.filePath("project.collett"));
-    if (prjFile.open(QIODevice::WriteOnly)) {
-        QTextStream outData(&prjFile);
-        outData << "Collett " << QString(COL_VERSION_STR) << Qt::endl;
-        outData << "Project 0.1" << Qt::endl;
-        prjFile.close();
-        return true;
-    } else {
-        return false;
-    }
-}
-
-QList<QUuid> Storage::listContent() const {
-
-    if (!m_isValid) {
-        return QList<QUuid>();
+    if (m_saveMode == Mode::Flat) {
+        return this->writeJson(m_rootPath.path(), fileData, false);
     }
 
-    QList<QUuid> result;
-
-    QDir contentPath = QDir(m_rootPath.path() + "/content");
-    QStringList jsonFiles = contentPath.entryList(QStringList() << "*.json", QDir::Files);
-
-    for (const QString &entry : jsonFiles) {
-        if (entry.length() != 41) {
-            qWarning() << "Unknown content:" << entry;
-            continue;
-        }
-        QUuid uuid(entry.first(36));
-        if (uuid.isNull()) {
-            qWarning() << "Skipped content:" << entry;
-            continue;
-        }
-        result << uuid;
-    }
-
-    return result;
+    return false;
 }
 
 bool Storage::isValid() {
@@ -259,7 +162,7 @@ bool Storage::readJson(const QString &filePath, QJsonObject &fileData) {
     return true;
 }
 
-bool Storage::writeJson(const QString &filePath, const QJsonObject &fileData) {
+bool Storage::writeJson(const QString &filePath, const QJsonObject &fileData, bool compact) {
 
     QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly)) {
@@ -271,7 +174,7 @@ bool Storage::writeJson(const QString &filePath, const QJsonObject &fileData) {
     QJsonDocument doc(fileData);
     QByteArray jsonData = doc.toJson(m_compactJson ? QJsonDocument::Compact : QJsonDocument::Indented);
 
-    if (m_compactJson) {
+    if (compact) {
         file.write(jsonData);
     } else {
         for (QByteArray line: jsonData.split('\n')) {
@@ -285,24 +188,6 @@ bool Storage::writeJson(const QString &filePath, const QJsonObject &fileData) {
     qDebug() << "Wrote:" << filePath;
 
     return true;
-}
-
-bool Storage::ensureFolder(const QString &folder) {
-    if (!m_isValid) {
-        return false;
-    }
-    QDir checkPath = QDir(m_rootPath.path() + "/" + folder);
-    if (checkPath.exists()) {
-        return true;
-    }
-    if (m_rootPath.mkdir(folder)) {
-        qDebug() << "Created folder:" << folder;
-        return true;
-    } else {
-        m_lastError = tr("Could not create folder: %1").arg(folder);
-        qWarning() << "Could not create folder:" << folder;
-        return false;
-    }
 }
 
 } // namespace Collett

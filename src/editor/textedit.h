@@ -3,7 +3,7 @@
 ** ===============================
 **
 ** This file is a part of Collett
-** Copyright 2020–2023, Veronica Berglyd Olsen
+** Copyright 2020–2024, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -19,14 +19,12 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef GUI_TEXTEDIT_H
-#define GUI_TEXTEDIT_H
+#ifndef GUI_TEXT_EDIT_H
+#define GUI_TEXT_EDIT_H
 
 #include "collett.h"
 #include "settings.h"
-#include "data.h"
 
-#include <QObject>
 #include <QWidget>
 #include <QTextEdit>
 #include <QJsonArray>
@@ -75,7 +73,7 @@ public slots:
     void toggleBoldFormat();
     void toggleItalicFormat();
     void toggleUnderlineFormat();
-    void toggleStrikeOutFormat();
+    void toggleStrikeFormat();
     void toggleSuperScriptFormat();
     void toggleSubScriptFormat();
     void toggleSegmentFormat();
@@ -91,4 +89,4 @@ private slots:
 };
 } // namespace Collett
 
-#endif // GUI_TEXTEDIT_H
+#endif // GUI_TEXT_EDIT_H

@@ -3,7 +3,7 @@
 ** =========================
 **
 ** This file is a part of Collett
-** Copyright 2020–2023, Veronica Berglyd Olsen
+** Copyright 2020–2024, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -24,12 +24,7 @@
 
 #include "collett.h"
 #include "project.h"
-#include "itemmodel.h"
 
-#include <QObject>
-#include <QString>
-#include <QWidget>
-#include <QVariant>
 #include <QScopedPointer>
 
 namespace Collett {
@@ -47,6 +42,7 @@ public:
 
     bool openProject(const QString &path);
     bool saveProject();
+    bool saveProjectAs(const QString &path);
     void closeProject();
 
     // Class Getters

@@ -3,7 +3,7 @@
 ** ==============================
 **
 ** This file is a part of Collett
-** Copyright 2020–2023, Veronica Berglyd Olsen
+** Copyright 2020–2024, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef SVGICONENGINE_H
-#define SVGICONENGINE_H
+#ifndef SVG_ICON_ENGINE_H
+#define SVG_ICON_ENGINE_H
 
 #include <QIcon>
 #include <QRect>
@@ -36,16 +36,17 @@ class SVGIconEngine : public QIconEngine
 {
 
 public:
-    explicit SVGIconEngine(const QByteArray &iconBuffer);
+    explicit SVGIconEngine(const QByteArray &normal, const QByteArray &active);
 
     void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state) override;
     QIconEngine *clone() const override;
     QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state) override;
 
 private:
-    QByteArray m_iconData;
+    QByteArray m_iconNormal;
+    QByteArray m_iconActive;
 
 };
 } // namespace Collett
 
-#endif // SVGICONENGINE_H
+#endif // SVG_ICON_ENGINE_H

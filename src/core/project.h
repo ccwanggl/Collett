@@ -3,7 +3,7 @@
 ** =======================
 **
 ** This file is a part of Collett
-** Copyright 2020–2023, Veronica Berglyd Olsen
+** Copyright 2020–2024, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -24,15 +24,8 @@
 
 #include "collett.h"
 #include "storage.h"
-#include "document.h"
-#include "itemmodel.h"
 
-#include <QDir>
-#include <QHash>
-#include <QUuid>
-#include <QObject>
-#include <QString>
-#include <QStringList>
+#include <QJsonObject>
 
 namespace Collett {
 
@@ -41,31 +34,27 @@ class Project : public QObject
     Q_OBJECT
 
 public:
-    explicit Project(const QString &path);
+    explicit Project();
     ~Project();
 
     // Class Methods
 
-    bool openProject();
+    bool openProject(const QString &path);
     bool saveProject();
-    ItemModel *newModel(ItemModel::ModelType type, const QString &name);
+    bool saveProjectAs(const QString &path);
 
     // Class Setters
 
-    void setLastDocumentMain(const QUuid &uuid);
     void setProjectName(const QString &name);
 
     // Class Getters
 
     bool isValid() const;
-    QUuid lastDocumentMain() const;
 
     QString projectName() const;
     Storage *store();
 
-    QStringList modelList() const;
-    ItemModel *model(const QString &name);
-    Document *document(const QUuid &uuid);
+    QJsonObject document() const;
 
     // Error Handling
 
@@ -73,9 +62,9 @@ public:
     QString lastError() const;
 
 private:
-    bool     m_isValid;
-    QString  m_lastError;
-    Storage *m_store;
+    bool     m_isValid = false;
+    QString  m_lastError = "";
+    Storage *m_store = nullptr;
 
     // Project Meta
 
@@ -83,19 +72,13 @@ private:
     QString m_projectVersion = "";
     QString m_createdTime = "";
 
-    // Project State
-
-    QUuid m_lastDocMain;
-
     // Project Settings
 
     QString m_projectName = "New Project";
 
-    // Content
+    // Project Content
 
-    QStringList                m_modelOrder;
-    QHash<QString, ItemModel*> m_models;
-    QHash<QUuid, Document*>    m_documents;
+    QJsonObject m_document;
 
     // File Load & Save
 

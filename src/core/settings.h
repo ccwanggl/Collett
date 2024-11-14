@@ -3,7 +3,7 @@
 ** =============================
 **
 ** This file is a part of Collett
-** Copyright 2020–2023, Veronica Berglyd Olsen
+** Copyright 2020–2024, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 
 #include <QList>
 #include <QSize>
-#include <QObject>
 #include <QScopedPointer>
 #include <QTextCharFormat>
 #include <QTextBlockFormat>

@@ -3,7 +3,7 @@
 ** =================================
 **
 ** This file is a part of Collett
-** Copyright 2020–2023, Veronica Berglyd Olsen
+** Copyright 2020–2024, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -19,16 +19,18 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef GUI_MAINTOOLBAR_H
-#define GUI_MAINTOOLBAR_H
+#ifndef GUI_MAIN_TOOLBAR_H
+#define GUI_MAIN_TOOLBAR_H
 
-#include <QObject>
-#include <QToolBar>
-#include <QLabel>
-#include <QString>
+#include "collett.h"
+
 #include <QAction>
-#include <QMenu>
+#include <QActionGroup>
+#include <QTextBlock>
+#include <QTextCharFormat>
+#include <QToolBar>
 #include <QToolButton>
+#include <QWidget>
 
 namespace Collett {
 
@@ -41,37 +43,54 @@ public:
     GuiMainToolBar(QWidget *parent=nullptr);
     ~GuiMainToolBar() {};
 
-    void setProjectName(const QString &name);
+public slots:
+    void editorCharFormatChanged(const QTextCharFormat &fmt);
+    void editorBlockChanged(const QTextBlock &block);
 
 private:
-    QLabel *m_projectName;
 
-    // Project Menu
-    QToolButton *m_projectButton;
-    QMenu       *m_projectMenu;
-    QAction     *m_newProject;
-    QAction     *m_openProject;
-    QAction     *m_saveProject;
-    QAction     *m_closeProject;
+    // Groups
+    QActionGroup *m_formatTextGroup;
+    QActionGroup *m_alignTextGroup;
 
-    // Documents Menu
-    QToolButton *m_docsButton;
-    QMenu       *m_docsMenu;
-    QAction     *m_newDocument;
-    QAction     *m_openDocument;
-    QAction     *m_saveDocument;
-    QAction     *m_renameDocument;
+    // File Menu
+    QAction *m_openFile;
+    QAction *m_saveFile;
 
-    // DropDown Menu
-    QToolButton *m_moreButton;
-    QMenu       *m_moreMenu;
+    // Paragraph Formatting
+    QToolButton *m_formatHeading;
+    QMenu       *m_formatHeadingMenu;
+    QAction     *m_formatHeading1;
+    QAction     *m_formatHeading2;
+    QAction     *m_formatHeading3;
+    QAction     *m_formatHeading4;
+    QAction     *m_formatParagraph;
 
-    void buildMainMenu();
-    void buildMoreMenu();
+    // Char Formatting
+    QAction *m_formatBold;
+    QAction *m_formatItalic;
+    QAction *m_formatUnderline;
+    QAction *m_formatStrike;
+    QAction *m_formatSuper;
+    QAction *m_formatSub;
+
+    // Text Align
+    QAction *m_alignLeft;
+    QAction *m_alignCenter;
+    QAction *m_alignRight;
+    QAction *m_alignJustify;
+
+    // Block Format
+    QAction *m_lineIndent;
+    QAction *m_textIndent;
+    QAction *m_textOutdent;
+
+    // Text Tools
+    QAction *m_textHighlight;
 
     friend class GuiMain;
 
 };
 } // namespace Collett
 
-#endif // GUI_MAINTOOLBAR_H
+#endif // GUI_MAIN_TOOLBAR_H

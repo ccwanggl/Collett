@@ -3,7 +3,7 @@
 ** ===============================
 **
 ** This file is a part of Collett
-** Copyright 2020–2023, Veronica Berglyd Olsen
+** Copyright 2020–2024, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -19,14 +19,12 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "collett.h"
-#include "settings.h"
 #include "textedit.h"
+#include "settings.h"
 
 #include <algorithm>
 
 #include <QFont>
-#include <QObject>
 #include <QWidget>
 #include <QDateTime>
 #include <QTextEdit>
@@ -45,8 +43,8 @@ GuiTextEdit::GuiTextEdit(QWidget *parent)
     : QTextEdit(parent)
 {
     // Settings
-    setAcceptRichText(true);
-    initDocument(this->document());
+    this->setAcceptRichText(true);
+    this->initDocument(this->document());
 
     CollettSettings *settings = CollettSettings::instance();
     m_format = settings->textFormat();
@@ -170,6 +168,8 @@ QJsonArray GuiTextEdit::toJsonContent() {
 
 void GuiTextEdit::setJsonContent(const QJsonArray &json) {
 
+    qint64 start = QDateTime::currentMSecsSinceEpoch();
+
     QTextDocument *doc = new QTextDocument(this);
     QTextCursor cursor = QTextCursor(doc);
     bool isFirst = true;
@@ -213,7 +213,7 @@ void GuiTextEdit::setJsonContent(const QJsonArray &json) {
                 charFormat = m_format.charHeader3;
                 blockFormat = m_format.blockHeader3;
             } else if (blockFmtType == "h4") {
-                charFormat = m_format.charHeader3;
+                charFormat = m_format.charHeader4;
                 blockFormat = m_format.blockHeader4;
             }
             jsonBlockFmt.removeFirst();
@@ -297,6 +297,9 @@ void GuiTextEdit::setJsonContent(const QJsonArray &json) {
     doc->setModified(false);
 
     this->setDocument(doc);
+
+    qint64 end = QDateTime::currentMSecsSinceEpoch();
+    qDebug() << "Document loaded in" << end - start << "ms";
 }
 
 /**
@@ -337,7 +340,7 @@ void GuiTextEdit::toggleUnderlineFormat() {
     this->setFontUnderline(!this->fontUnderline());
 }
 
-void GuiTextEdit::toggleStrikeOutFormat() {
+void GuiTextEdit::toggleStrikeFormat() {
     QFont font = this->currentFont();
     font.setStrikeOut(!font.strikeOut());
     this->setCurrentFont(font);

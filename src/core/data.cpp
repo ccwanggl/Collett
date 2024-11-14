@@ -3,7 +3,7 @@
 ** =========================
 **
 ** This file is a part of Collett
-** Copyright 2020–2023, Veronica Berglyd Olsen
+** Copyright 2020–2024, Veronica Berglyd Olsen
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -21,9 +21,7 @@
 
 #include "data.h"
 #include "project.h"
-#include "itemmodel.h"
 
-#include <QString>
 #include <QWidget>
 #include <QVariant>
 
@@ -56,9 +54,9 @@ CollettData::~CollettData() {
 
 bool CollettData::openProject(const QString &path) {
 
-    m_project.reset(new Project(path));
+    m_project.reset(new Project());
     if (!m_project.data()->hasError()) {
-        m_project.data()->openProject();
+        m_project.data()->openProject(path);
     }
     if (!m_project.data()->isValid()) {
         m_project.reset(nullptr);
@@ -71,6 +69,14 @@ bool CollettData::openProject(const QString &path) {
 bool CollettData::saveProject() {
     if (hasProject()) {
         return m_project.data()->saveProject();
+    } else {
+        return false;
+    }
+}
+
+bool CollettData::saveProjectAs(const QString &path) {
+    if (hasProject()) {
+        return m_project.data()->saveProjectAs(path);
     } else {
         return false;
     }
