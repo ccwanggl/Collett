@@ -22,9 +22,13 @@
 #ifndef COLLETT_H
 #define COLLETT_H
 
-#define COL_VERSION_STR "0.0.1-alpha0"
-#define COL_VERSION_NUM 0x000001a0
-#define COL_VERSION_DATE "2021-11-14"
+#define COL_VERSION_STR "0.0.1-alpha1"
+#define COL_VERSION_NUM 0x000001a1
+#define COL_VERSION_DATE "2024-11-14"
+
+#include <QObject>
+#include <QString>
+#include <QLatin1String>
 
 namespace Collett {
 

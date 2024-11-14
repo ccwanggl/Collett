@@ -83,10 +83,13 @@ include_directories(
 
 # Source Files
 list(APPEND SRC_FILES
-    src/editor/textedit
+    src/core/data
     src/core/icons
+    src/core/project
     src/core/settings
+    src/core/storage
     src/core/svgiconengine
+    src/editor/textedit
     src/gui/maintoolbar
     src/guimain
     src/main

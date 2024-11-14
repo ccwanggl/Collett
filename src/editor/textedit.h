@@ -25,7 +25,6 @@
 #include "collett.h"
 #include "settings.h"
 
-#include <QObject>
 #include <QWidget>
 #include <QTextEdit>
 #include <QJsonArray>

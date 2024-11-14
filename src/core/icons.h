@@ -22,12 +22,12 @@
 #ifndef COLLETT_ICONS_H
 #define COLLETT_ICONS_H
 
+#include "collett.h"
+
 #include <QByteArray>
 #include <QHash>
 #include <QIcon>
-#include <QObject>
 #include <QSize>
-#include <QString>
 
 namespace Collett {
 

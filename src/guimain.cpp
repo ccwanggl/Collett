@@ -20,17 +20,20 @@
 */
 
 #include "guimain.h"
+#include "data.h"
 #include "maintoolbar.h"
 #include "settings.h"
 #include "textedit.h"
 
-#include <QCloseEvent>
 #include <QApplication>
+#include <QCloseEvent>
+#include <QJsonArray>
 
 namespace Collett {
 
 GuiMain::GuiMain(QWidget *parent) : QMainWindow(parent) {
 
+    m_data = CollettData::instance();
     setWindowTitle(qApp->applicationName());
 
     // Settings
@@ -111,6 +114,13 @@ GuiMain::~GuiMain() {
  */
 void GuiMain::openFile(const QString &path) {
 
+    m_data->openProject(path);
+    if (!m_data->hasProject()) {
+        return;
+    }
+
+    QJsonArray jContent = m_data->project()->document().value(QLatin1String("x:content")).toArray();
+    this->m_textEditor->setJsonContent(jContent);
 }
 
 /**

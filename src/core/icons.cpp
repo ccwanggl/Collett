@@ -25,7 +25,6 @@
 #include <QIcon>
 #include <QColor>
 #include <QDebug>
-#include <QString>
 #include <QPalette>
 #include <QApplication>
 

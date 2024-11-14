@@ -19,14 +19,12 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "collett.h"
-#include "settings.h"
 #include "textedit.h"
+#include "settings.h"
 
 #include <algorithm>
 
 #include <QFont>
-#include <QObject>
 #include <QWidget>
 #include <QDateTime>
 #include <QTextEdit>

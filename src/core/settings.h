@@ -26,7 +26,6 @@
 
 #include <QList>
 #include <QSize>
-#include <QObject>
 #include <QScopedPointer>
 #include <QTextCharFormat>
 #include <QTextBlockFormat>

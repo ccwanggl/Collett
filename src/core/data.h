@@ -1,6 +1,6 @@
 /*
-** Collett – Main GUI Class
-** ========================
+** Collett – Core Data Class
+** =========================
 **
 ** This file is a part of Collett
 ** Copyright 2020–2024, Veronica Berglyd Olsen
@@ -19,43 +19,42 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef GUI_MAIN_H
-#define GUI_MAIN_H
+#ifndef COLLETT_DATA_H
+#define COLLETT_DATA_H
 
 #include "collett.h"
-#include "data.h"
-#include "maintoolbar.h"
-#include "textedit.h"
+#include "project.h"
 
-#include <QAction>
-#include <QMainWindow>
+#include <QScopedPointer>
 
 namespace Collett {
 
-class GuiMain : public QMainWindow
+class CollettData : public QObject
 {
     Q_OBJECT
 
 public:
-    GuiMain(QWidget *parent=nullptr);
-    ~GuiMain();
+    static CollettData *instance();
+    ~CollettData();
+    CollettData();
 
-    // GUI Components
-    GuiMainToolBar *m_mainToolBar;
-    GuiTextEdit    *m_textEditor;
+    // Class Methods
 
-    // Methods
-    void openFile(const QString &path);
-    bool closeMain();
+    bool openProject(const QString &path);
+    bool saveProject();
+    bool saveProjectAs(const QString &path);
+    void closeProject();
+
+    // Class Getters
+
+    bool hasProject() const;
+    Project *project();
 
 private:
-    CollettData *m_data;
-
-    void closeEvent(QCloseEvent*);
-
-private slots:
+    static CollettData *staticInstance;
+    QScopedPointer<Project> m_project;
 
 };
 } // namespace Collett
 
-#endif // GUI_MAIN_H
+#endif // COLLETT_DATA_H

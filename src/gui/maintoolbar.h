@@ -22,9 +22,10 @@
 #ifndef GUI_MAIN_TOOLBAR_H
 #define GUI_MAIN_TOOLBAR_H
 
+#include "collett.h"
+
 #include <QAction>
 #include <QActionGroup>
-#include <QObject>
 #include <QTextBlock>
 #include <QTextCharFormat>
 #include <QToolBar>
