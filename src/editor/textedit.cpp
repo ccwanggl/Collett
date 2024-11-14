@@ -168,6 +168,8 @@ QJsonArray GuiTextEdit::toJsonContent() {
 
 void GuiTextEdit::setJsonContent(const QJsonArray &json) {
 
+    qint64 start = QDateTime::currentMSecsSinceEpoch();
+
     QTextDocument *doc = new QTextDocument(this);
     QTextCursor cursor = QTextCursor(doc);
     bool isFirst = true;
@@ -295,6 +297,9 @@ void GuiTextEdit::setJsonContent(const QJsonArray &json) {
     doc->setModified(false);
 
     this->setDocument(doc);
+
+    qint64 end = QDateTime::currentMSecsSinceEpoch();
+    qDebug() << "Document loaded in" << end - start << "ms";
 }
 
 /**
